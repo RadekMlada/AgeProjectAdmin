@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_content_type_project_links",
+  "info": {
+    "displayName": "ProjectLink",
+    "icon": "arrows-alt-h",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "Project": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::project.project"
+    },
+    "Title": {
+      "type": "string"
+    }
+  }
+}

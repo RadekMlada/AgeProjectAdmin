@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_page_type_abouts",
+  "info": {
+    "displayName": "About",
+    "icon": "apple-alt",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "Title": {
+      "type": "string"
+    },
+    "Description": {
+      "type": "richtext"
+    }
+  }
+}

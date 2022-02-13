@@ -1,0 +1,70 @@
+{
+  "kind": "collectionType",
+  "collectionName": "projects",
+  "info": {
+    "singularName": "project",
+    "pluralName": "projects",
+    "displayName": "Project",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Title": {
+      "type": "string"
+    },
+    "Description": {
+      "type": "richtext"
+    },
+    "Documents": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos"
+      ]
+    },
+    "Code": {
+      "type": "string"
+    },
+    "Type": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::project-type.project-type"
+    },
+    "Construction": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::project-construction-type.project-construction-type"
+    },
+    "Phase": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::project-phase.project-phase"
+    },
+    "Images": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos"
+      ]
+    },
+    "Year": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::project-year-of-realization.project-year-of-realization"
+    },
+    "Award": {
+      "type": "component",
+      "repeatable": false,
+      "component": "content-type.project-award"
+    }
+  }
+}

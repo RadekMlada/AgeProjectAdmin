@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_page_type_contacts",
+  "info": {
+    "displayName": "Contact",
+    "icon": "compress-arrows-alt",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "Phone": {
+      "type": "string"
+    },
+    "Email": {
+      "type": "string"
+    },
+    "Street": {
+      "type": "string"
+    },
+    "City": {
+      "type": "string"
+    },
+    "Website": {
+      "type": "string"
+    }
+  }
+}

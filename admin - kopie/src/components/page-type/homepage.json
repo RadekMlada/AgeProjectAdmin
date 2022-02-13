@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_page_type_homepages",
+  "info": {
+    "displayName": "Homepage",
+    "icon": "align-justify",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "Gallery": {
+      "type": "component",
+      "repeatable": true,
+      "component": "content-type.galery-image"
+    }
+  }
+}

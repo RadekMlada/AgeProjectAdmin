@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_content_type_project_awards",
+  "info": {
+    "displayName": "ProjectAward",
+    "icon": "bullhorn",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "Year": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::project-year-of-realization.project-year-of-realization"
+    },
+    "Link": {
+      "type": "string"
+    },
+    "Name": {
+      "type": "string"
+    },
+    "Description": {
+      "type": "text"
+    }
+  }
+}
