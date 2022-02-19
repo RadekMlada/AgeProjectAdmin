@@ -1030,6 +1030,8 @@
                 }
 
                 destroyFullpage();
+                console.log(data);
+                age.showProjectDetail(data);
                 return;
 
                 $('.projectName').html('<span>'+data.name+'</span>');
