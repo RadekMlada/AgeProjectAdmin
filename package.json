@@ -14,7 +14,9 @@
     "@strapi/plugin-users-permissions": "4.0.7",
     "@strapi/strapi": "4.0.7",
     "gulp": "^4.0.2",
+    "gulp-concat": "^2.6.1",
     "gulp-less": "^5.0.0",
+    "gulp-minify-css": "^1.2.4",
     "sqlite3": "5.0.2"
   },
   "author": {

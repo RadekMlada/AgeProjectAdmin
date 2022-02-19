@@ -1,4 +1,6 @@
-﻿$(function () {
+﻿var age = age || {};
+
+$(function () {
     var resetViewport = function () {
         try {
             var minWidth = 375;
@@ -49,14 +51,6 @@
     }
     )(Element.prototype);
 
-    //var navMain = $(".navbar-collapse"); // avoid dependency on #id
-    //// "a:not([data-toggle])" - to avoid issues caused
-    //// when you have dropdown inside navbar
-    //navMain.on("click", "a:not([data-toggle])", null, function () {
-    //    navMain.collapse('hide');
-    //});
-
-    var firstLeaveAttemptDone = true;
     var isMobile = !msieversion();
     var initialProject = null;
     document.addEventListener('wheel', this.onMouseWheel, { passive: false });
@@ -65,14 +59,12 @@
     function onWindowScroll() {
         var pivotSelector = $(window);
         var scrollVal = pivotSelector.scrollTop();
-        console.log(scrollVal);
         var pivotVal = $('#section-projects h1').offset().top;
-        console.log(pivotVal);
         var isHeaderNear = Math.abs(scrollVal - pivotVal) < 70;
         $('#section-projects').toggleClass('with-header', isHeaderNear);
     }
 
-    window.initByHash = function (target, closeMenu) {
+    age.initByHash = function (target, closeMenu) {
         var initialHash = window.location.hash;
         var url = null;
         if (target && target.href) {
@@ -83,29 +75,9 @@
                 $(target).parent().addClass('active');
         }
 
-        setTimeout(function () {
-            if (initialHash) {
-                var hashParts = initialHash.split("/");
-                if (hashParts && hashParts.length === 3) {
-                    $('#loading-cover').show();
-                    initialProject = {};
-                    initialProject.Id = parseInt(hashParts[1]);
-                    initialProject.SlideId = parseInt(hashParts[2]) - 1;
-                    console.log(initialProject);
-                }
-
-                if (url) {
-                    console.log('moving to ... ' + hashParts[0]);
-                    $('#filterContainer .button-reset').click();
-                    window.ignoreContentScroll = true;
-                    fullPageMainPage.moveTo(hashParts[0]);
-                }
-            }
-        }, 1);
-
         return false;
     };
-    window.initByHash();
+    age.initByHash();
 
     $('#projectsNav').click(function () {
         //pokud jsme v sekci projekty a uživatel klikne v menu na projekty, tak ho navedeme na začátek/list projektů
@@ -116,16 +88,25 @@
     });
 
     $('#menu a').click(function() {
+        if(!age.isFullpage) {
+            age.hideProjectDetail();
+            showFullpage();
+            var sectionName = $(this).parent().data('menuanchor');
+            $(document).scrollTop(age.scrollTop);
+            if(sectionName == 'projects') {
+                return;
+            }
+        }
         //menu navigace funguje pouze pro slide 0
         window.currentSlideIndex = 0;
         var sectionName = $(this).parent().data('menuanchor');
-        if(!window.location.hash.startsWith('#'+sectionName)) {
-            console.log('moving to section');
-            if(sectionName == 'projects') {
-                window.currentSlideIndex =  $('.projectDetail .imageThumbnails li').index($('.projectDetail .imageThumbnails li.active'));
-            }
-            fullPageMainPage.moveTo(sectionName);
-        }
+        setTimeout(function() {
+                fullPageMainPage.moveTo(sectionName);
+        }, 100);
+    });
+
+    $('#logoPh').click(function() {
+        fullPageMainPage.moveTo('home');
     });
 
     jQuery.getScript('https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyBSERrQ7rP_Wn3CmfZAHIFdWxZ-BXCp25k');
@@ -177,13 +158,14 @@
         }
 
         var anchors = ['home', 'projects', 'atelier', 'media', 'career', 'contacts'];
+        age.isFullpage = true;
         return new fullpage('#fullpage', {
             //#9db667
             //#b8d555
             licenseKey: 'FBC71F56-EC2B42A6-84BF5E79-B04FE81C',
             paralaxKey: '3FB6DAF9-3FBA4470-947C5F29-553D087F',
             sectionsColor: ['#000000', '#000000', '#000000', '#000000', '#000000', '#000000'],
-            anchors: anchors,
+            anchors: [],//anchors,
             lockAnchors: false,
             autoScrolling: false,
             menu: '#menu',
@@ -191,14 +173,12 @@
             css3: false,
             scrollingSpeed: 700,
             fitToSection: true,
-            fitToSectionDelay: 700,
+            fitToSectionDelay: 500,
             scrollBar: false,
             easing: 'easeInOutCubic',
             easingcss3: 'ease',
             verticalCentered: false,
             loopHorizontal: false,
-            /*fixedElements: '#header',*/
-            /*normalScrollElements: '#projectListContainer',*/
             parallax: false,
             parallaxOptions: {
                 type: 'reveal',
@@ -206,172 +186,31 @@
                 property: 'translate'
             },
 
-
             onLeave: function (origin, destination, direction) {
-                //1
-                //$('body').toggleClass('header-scrolled', nextIndex != 1);
-                ////$('#section1 .content').toggleClass('spaced', index == 3 && nextIndex == 2);
-                //$('#menu a').blur();
-                //if (!firstLeaveAttemptDone && index == 2) {
-                //    setTimeout(function () { firstLeaveAttemptDone = true; }, 300);
-                //    return false;
-                //}
-
-                //firstLeaveAttemptDone = false;
-                //1
-
-                //if(index == 3 && window.currentSlideIndex > 0 && nextIndex != index && nextIndex != 1) {
-                //    var nextSlideIndex = window.currentSlideIndex - index + nextIndex;
-                    
-                //    var nextThumb = $('.projectDetail .imageThumbnails li').eq(nextSlideIndex);
-                //    if (nextThumb.length == 0) {
-                //        return false;
-                //    }
-
-                //    $('#section-projects .fp-next').toggleClass('hidden', nextThumb.next().length == 0);
-
-                //    if (!nextThumb.hasClass('moving'))
-                //        nextThumb.trigger('click');
-
-                //    return false;
-                //}
-
-                //if (!window.ignoreContentScroll) {
-                //    var ele = $('#projectListSlide');
-
-                //    var cur = ele.scrollTop();
-                //    if (index === 3 && nextIndex > 3) {
-                //        var diff = ele[0].scrollTopMax - cur;
-                //        if (diff > 0) {
-                //            if (diff > 150)
-                //                diff = cur + 150;
-                //            else
-                //                diff = cur + diff;
-
-                //            if(!window.noScroll)
-                //                ele.stop().animate({
-                //                    scrollTop: diff
-                //                }, {
-                //                        easing: 'easeOutExpo',
-                //                        duration: isMobil ? 250 : 10
-                //                    });
-                //            window.noScroll = true;
-                //            setTimeout(function () { window.noScroll = false; }, 200);
-                //            return false;
-                //        }
-                //    }
-
-                //    if (index === 3 && nextIndex < 3) {
-                //        if (cur > 0) {
-                //            if (cur > 150)
-                //                cur -= 150;
-                //            else
-                //                cur = 0;
-
-                //            if (!window.noScroll)
-                //                ele.stop().animate({
-                //                    scrollTop: cur
-                //                }, {
-                //                        easing: 'easeOutExpo',
-                //                        duration: isMobil ? 250 : 10
-                //                    });
-                //            window.noScroll = true;
-                //            setTimeout(function () { window.noScroll = false; }, 200);
-                //            return false;
-                //        }
-                //    }
-                //} else {
-                //    window.ignoreContentScroll = false;
-                //}
-
-                //if (nextIndex === 3) {
-                //    var nextThumb = $('.projectDetail .imageThumbnails li').eq(0);
-                //    $('#section-projects .fp-next').toggleClass('hidden', nextThumb.next().length == 0);
-                //}
                 if (destination.index == 5)
                     setTimeout(age.initMap, 500);
-
-                //var slideAnchor = '#' + anchors[nextIndex-1];
-                //if(window.location.hash != slideAnchor)
-                //    window.location.hash = slideAnchor;
-            },
-            onSlideLeave: function (anchorLink, index, slideIndex, direction, nextSlideIndex) {
-                //$('body').toggleClass('header-scrolled', index != 1);
-                //window.isMoving = true;
-                //if (index == 1 || index == 2) {
-                //    var nextThumb = $('.section.active .imageThumbnails li').eq(nextSlideIndex);
-                //    if (nextThumb.hasClass('active')) {
-                //        console.log('onslide leave no action');
-                //        console.trace();
-                //        return true;
-                //    }
-
-                //    console.log('onslide leave trigger click');
-                //    console.trace();
-                //    nextThumb.trigger('click');
-                //    return false;
-                //}
-
-                
-
-                //$('.projectDetail').toggleClass('inactive', index == 3 && nextSlideIndex == 0);
-                //if (index == 3 && nextSlideIndex > 0) {
-                //    var nextThumb = $('.projectDetail .imageThumbnails li').eq(nextSlideIndex);
-                //    if (nextThumb.length == 0)
-                //        return false;
-                //    $('#section-projects .fp-next').toggleClass('hidden', nextThumb.next().length == 0);
-
-                //    if (nextThumb.hasClass('moving'))
-                //        return true;
-                //    nextThumb.trigger('click');
-                //    return false;
-                //}
             },
             afterRender: function () {
-                //if(startSection)
-                //    fullPageMainPage.silentMoveTo(startSection, startIndex);
-            },
-            afterSlideLoad: function (anchorLink, index, slideAnchor, slideIndex) {
-                //window.currentSlideIndex = slideIndex;
-                //if(index == 3) {
-                //    var thumb = $('.projectDetail .imageThumbnails li').eq(slideIndex);
-                //    thumb.removeClass('moving');
-
-                //    if (slideIndex == 0 && !initialProject) {
-                //        window.location.hash = "#projects";
-                //    }
-                //}
-                //window.isMoving = false;
             },
             afterLoad: function (fromSlide, toSlide) {
-                //$('.anchor-button .up').toggle(index == 1);
-                //$('.anchor-button .down').toggle(index != 1);
-                //$('#menu .nav-item').removeClass('active');
-                //$('#menu .nav-item').find('a[href="#' + anchorLink.anchor + '"]').parent().addClass('active');
-                //$('#section-projects').removeClass('activating');
-                
-                //if (index == 3 && initialProject) {
-                //    var initialImg = $('#section-projects .projectItem[data-project-item-id=' + initialProject.Id + ']');
-                //    if(initialImg.length>0) {
-                //        //initialImg.removeClass('initial');
-                //        initialImg.trigger('click', [initialProject.SlideId]);
-                //        initialProject = null;
-                //        setTimeout(function () {
-                //            $('#loading-cover').hide();
-                //        }, 500);
-                //    }
-                //}
                 window.currentIndex = toSlide.index;
             }
         });
     }
-    function destroyFullpage() {
-        fullPageMainPage.destroy();
-        $('#fullpage').css('display', 'none');
+    function hideFullpage() {
+        $('#fullpageWrapper').css('display', 'none');
+        fullPageMainPage.destroy('all');
+        age.isFullpage = false;
+    }
+
+    function showFullpage() {
+        $('#fullpageWrapper').css('display', 'block');
+        fullPageMainPage = initFullpage();
+        
+        age.isFullpage = true;
     }
 
     function rebuildFullpage(startSection, startIndex) {
-        $('#fullpage').css('display', 'block');
         fullPageMainPage.reBuild();
     }
 
@@ -518,21 +357,6 @@
 
     function initBgImages(page, container, bgContainer, thumbnailUrl, sectionName, progressForFirstImage) {
         $.each(page.list, function (i, image) {
-            //if (sectionName === 'about') {
-            //    addInfo = '<a href="file:///C:/projects/agetemp/index.html#projects" class="stavba-roku-2018">' +
-            //        '<span class="row2"><span>Info o nás</span></span>' +
-            //        '<span class="row1"><span class="fas fa-info"></span></span>' +
-            //        '</a >' +
-            //        '<a href="file:///C:/projects/agetemp/index.html#projects/24/1" onclick="window.initByHash(this)" class="stavba - roku - 2018">' +
-            //        '<span class="row2"><span>Team</span></span>' +
-            //        '<span class="row1"><span class="fas fa-users"></span></span>' +
-            //        '</a >' +
-            //        '<a href="file:///C:/projects/agetemp/index.html#projects" class= "stavba-roku-2018">' +
-            //        '<span class="row2"><span>Ocenění</span></span>' +
-            //        '<span class="row1"><span class="fas fa-award"></span></span>' +
-            //        '</a >';
-            //}
-
             var addInfo = "";
             if (image.actionTitle && image.actionUrl) {
                 addInfo = '<a href="' + image.actionUrl + '" onclick="window.initByHash(this)">' +
@@ -1029,154 +853,11 @@
                     return;
                 }
 
-                destroyFullpage();
-                console.log(data);
+                age.scrollTop = $(document).scrollTop();
+                hideFullpage();
                 age.showProjectDetail(data);
+                finish();
                 return;
-
-                $('.projectName').html('<span>'+data.name+'</span>');
-                $('.projectName').removeClass().addClass('projectName').addClass(data.titleBgStyle);
-                $('.projectName span').removeClass().addClass(data.titleTextStyle);
-                
-                //$('.project-thumbnails>ol').html('');
-                //$("#project-detail-content .glyphicon-remove").show();
-                //$("#project-detail-content .glyphicon-chevron-down").hide();
-
-                if (data.description) {
-                    $('.projectText');
-                    $('.projectText').html(data.description.replace(/(?:\r\n|\r|\n)/g, '<br>')).show();
-                    
-                }
-                else
-                    $('.projectText').hide();
-
-                var filesContainer = $('.projectFiles');
-                if (data.files.length) {
-                    filesContainer.html('').show();
-                    $.each(data.files, function (i, file) {
-                        filesContainer.append($('<a target="blank" href="http://ageproject.radekmlada.com' + file.url + '"><span class="glyphicon glyphicon-file"></span><span class="text">' + file.name + '</span></a>'));
-                    });
-                } else
-                    filesContainer.hide();
-
-                if (!data.description && !data.files.length) {
-                    $('.projectDescriptionIcon').hide();
-                    $('.projectDescription').hide();
-                }
-                else {
-                    $('.projectDescription').removeClass().addClass('projectDescription').addClass(data.bgStyle).hide();
-                    $('.projectDescription>div').removeClass().addClass('text').addClass(data.textStyle);
-                    $('.projectDescriptionIcon').show();
-                }
-
-                $('.projectDescriptionIcon').unbind('click').click(function () {
-                    $('.projectDescription').fadeIn(500);
-                    $('.projectDescriptionIcon').hide();
-                });
-
-                $('.projectDescription .close').unbind('click').click(function () {
-                    $('.projectDescription').fadeOut(500);
-                    $('.projectDescriptionIcon').show();
-                });
-
-                $('.projectDescriptionIcon h3 span.text').html('<i class="fas fa-info-circle"></i><span class="info-o-projektu-header">Info o projektu</span>');
-                
-                if(!slideIndex)
-                    slideIndex = 0;
-
-                var showProjectDetail = function (img) {
-                    console.log('show project detail');
-                    fullpage_api.destroy();
-                    var homeThumb = $('<li data-target="#project-carousel" data-slide-to="0" class="project-thumbnail project-home"></li>');
-                    homeThumb.click(function (e) {
-                        fullPageMainPage.moveTo('projects', 0);
-                    });
-
-                    $('.projectDetail .imageThumbnails ol').empty().append(homeThumb);
-
-                    $.each(data.images, function (i, image) {
-                        var slide = $('#section-projects').find('.slide' + (i + 1)).empty('');
-                        var thumb = $('<li data-target="#project-carousel" data-slide-to="' + i + '" class="project-thumbnail thumbnail' + image.id + '" style="background-image:url(http://ageproject.radekmlada.com' + data.thumbnailUrl + ');' +
-                            ' background-position-x: -' + image.thumbnailX +
-                            'px; background-position-y: -' + image.thumbnailY +
-                            'px;"></li>');
-                        $('.projectDetail .imageThumbnails ol').append(thumb);
-                        if (i == slideIndex) thumb.addClass('active');
-
-                        thumb.click(function (e) {
-                            console.log('show project detail clicked ' + e);
-                            window.location.hash = "#projects/"+projectItem.id+"/"+(i+1);
-                            if (image.loaded) {
-                                thumb.siblings('li').removeClass('active');
-                                thumb.addClass('active');
-                                thumb.addClass('moving');
-                                setTimeout(function () { fullPageMainPage.moveTo('projects', i + 1); }, 200);
-                                
-                                return;
-                            }
-
-                            var thumbEnd = thumb.position().left + thumb.width() + 20;
-                            var container = $(".projectDetail .imageThumbnails");
-                            var containerEnd = container.scrollLeft() + container.width();
-                            if (thumbEnd > containerEnd)
-                                container.stop().animate({
-                                    scrollLeft: thumbEnd - container.width()
-                                }, 500, 'easeInOutExpo');
-                            //var bg = $('#project-detail-bg-container .img' + image.id + ' .bg-fill');
-                            ////priority slouží k označení svg obrázku, který má prioritu při překreslení pře změně velikosti window
-                            //$('#project-detail-bg-container .svg-fullscreen').removeClass('priority');
-                            //bg.find('svg').addClass('priority');
-                            //if (image.loaded) {
-                            //    return;
-                            //}
-                            var imageUrl = 'http://ageproject.radekmlada.com' + image.url;
-
-                            var currentSlide = $('#section-projects').find('.slide.active .fill');
-                            carouselLoader(currentSlide, 100);
-                            carouselLoader(thumb, 20);
-
-                            initProjectDetailBg(data, i, function (svg) {
-                                image.loaded = true;
-                                thumb.trigger('click');
-                                carouselLoader(svg, 100);
-                                carouselLoaderEnd(currentSlide);
-                                loadImage(imageUrl).done(function () {
-                                    $('#section-projects').find('.slide' + (i + 1) + ' .fill').css('background-image', 'url(' + imageUrl + ')').hide().fadeIn(250);
-
-                                    carouselLoaderEnd(thumb);
-                                    carouselLoaderEnd(svg);
-                                });
-                            });
-                        });
-                        showProjectImage(data.images[i], i, i != slideIndex);
-                    });
-
-                    function initProjectDetailBg(data, i, complete) {
-                        if (i == data.images.length) return;
-
-                        var image = data.images[i];
-                        var bgImageUrl = 'http://ageproject.radekmlada.com' + image.url.replace('.jpg', '_thumbnail60.jpg');
-
-                        loadImage(bgImageUrl).done(function (img) {
-                            var container = $('#section-projects .slide' + (i + 1) + ' .bg-fill');
-
-                            var svg = redrawSvg(container, img, i);
-                            if (complete)
-                                complete(svg);
-                        });
-                    }
-
-                    initProjectDetailBg(data, slideIndex);
-                    finish();
-                    setTimeout(function () { fullPageMainPage.moveTo('projects', 1+slideIndex); }, 500);
-                    return;
-                };
-
-                loadImage('http://ageproject.radekmlada.com' + data.images[slideIndex].url).then(function () {
-                    loadImage('http://ageproject.radekmlada.com' + data.thumbnailUrl).then(function () {
-                        loadImage('http://ageproject.radekmlada.com' + data.images[slideIndex].url.replace('.jpg', '_thumbnail60.jpg')).then(showProjectDetail);
-                    });
-                });
             },
             error: function () {
                 var that = this;

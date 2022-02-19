@@ -27,12 +27,12 @@
         -webkit-transform: scale3D(0,0,1);
         transform: scale3D(0,0,1);
     }
-}
+} 
 
 @import "labels";
 @import "section_projects";
 @import "section_contacts";
-@import "section_career";
+@import "section_career"; 
 @import "section_atelier";
 @import "section_media";
 @import "project_detail";
@@ -498,8 +498,13 @@ h6 {
         background-color: rgba(0,0,0,0) !important;
     }
 }
+.navbar-nav .active {
+    background-color: transparent !important;
 
-.active {
+    a {
+        background-color: transparent;
+    }
+
     .nav-link {
         background-color: #000000 !important;
         color: #fff !important;

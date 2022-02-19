@@ -13,7 +13,7 @@
     <link rel="stylesheet" type="text/css" href="css/vendor/fullpage.min.css" />
     <link rel="stylesheet" type="text/css" href="css/vendor/bootstrap.css?1" />
     <link rel="stylesheet" type="text/css" href="css/vendor/bootstrap-theme.css?1" />
-    <link rel="stylesheet" type="text/css" href="css/main.min.css?24112018b" />
+    <link rel="stylesheet" type="text/css" href="css/main.css?24112018b" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
 
@@ -169,7 +169,7 @@
     <div id="content" style="display:none">
         <div id="header">
             <div class="col-sm-10">
-                <a onclick="window.initByHash(this)" id="logoPh" class="logo" href="#home"></a>
+                <a id="logoPh" class="logo" href="#home"></a>
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                         <!--<span class="glyphicon glyphicon-menu-hamburger"></span>onclick="window.initByHash(this, true)" -->
@@ -204,126 +204,129 @@
                 </div>
             </div>
         </div>
+        <div id="project-detail" style="display:none">
+            <div id="project-detail-content">
+                <div id="project-detail-main-image">
+                    <h1></h1>
+                    <img/>
+                </div>
+                <div id="project-detail-info">
+                    
+                </div>
+                <div id="project-detail-images">
 
-        <div id="fullpage">
-            <div class="section" id="section0" data-anchor="home">
-                <ol class="imageThumbnails" style="display:none"></ol>
-            </div>
-            <div class="section fp-auto-height" id="section-projects" data-anchor="projects">
-                <div class="slide slide0 filterClosed" id="projectListSlide">
-                    <h1>PROJEKTY</h1>
-                    <div id="projectListSlideContent">
-                        <!--<div id="filterContainerPh">
-                            <div id="filterContainer">
-                                <a class="comment button-reset selected"><span title="resetuj filtry" class="glyphicon glyphicon-cloud"></span>průřez tvorbou</a>
-                                <a class="comment button-reset-all"><span title="zobraz všechny projekty" class="glyphicon glyphicon-list-alt"></span>všechny projekty</a>
-                            </div>
-                            <span title="zobraz filtry" id="project-filters-toggle" data-active="true"><span class="text">filtry</span><span class="glyphiconPh"><span class="glyphicon glyphicon-chevron-up"></span></span></span>
-                        </div>-->
-                        <div id="projectListContainer"></div>
-                    </div>
                 </div>
             </div>
-            <div class="section" id="section-atelier" data-anchor="atelier">
-                <div>
+        </div>
+        <div id="fullpageWrapper">
+            <div id="fullpage">
+                <div class="section" id="section0" data-anchor="home">
+                    <ol class="imageThumbnails" style="display:none"></ol>
+                </div>
+                <div class="section fp-auto-height" id="section-projects" data-anchor="projects">
+                    <div class="slide slide0 filterClosed" id="projectListSlide">
+                        <h1>PROJEKTY</h1>
+                        <div id="projectListSlideContent">
+                            <!--<div id="filterContainerPh">
+                                <div id="filterContainer">
+                                    <a class="comment button-reset selected"><span title="resetuj filtry" class="glyphicon glyphicon-cloud"></span>průřez tvorbou</a>
+                                    <a class="comment button-reset-all"><span title="zobraz všechny projekty" class="glyphicon glyphicon-list-alt"></span>všechny projekty</a>
+                                </div>
+                                <span title="zobraz filtry" id="project-filters-toggle" data-active="true"><span class="text">filtry</span><span class="glyphiconPh"><span class="glyphicon glyphicon-chevron-up"></span></span></span>
+                            </div>-->
+                            <div id="projectListContainer"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="section" id="section-atelier" data-anchor="atelier">
                     <div>
-                        <h1>O NÁS</h1>
-                        <p class="atelier-info">
-                            Společnost AGE project, s.r.o. je projekční společnost založená a prosperující od roku 1995. Za více než 25 let působení realizovala desítky projektů a získala několik prestižních ocenění. Cílem naší společnosti je projektování rezidenčního bydlení a komerčních objektů a to jak formou spolupráce s developerskými společnostmi, tak i vytváření staveb pro individuální investory.
-                        </p>
-                        
-                        <div class="atelier-members">
-                            <h1 class="team">LIDÉ</h1>
-                            <div class="atelier-members-top">
-                                <div class="atelier-member"><div><label>JIRKA</label><span>ZAKLADATEL SPOLEČNOSTI</span></div></div>
-                                <div class="atelier-member"><div><label>MILAN</label><span>HLAVNÍ ARCHITEKT</span></div></div>
-                                <div class="atelier-member"><div><label>PAVEL</label><span>HLAVNÍ INŽENÝR</span></div></div>
-                                <div class="atelier-member"><div><label>ADEL</label><span>ARCHITEKT</span></div></div>
-                                <div class="atelier-member"><div><label>VÍTEK</label><span>ARCHITEKT</span></div></div>
-                                <div class="atelier-member"><div><label>HONZA</label><span>INŽENÝR</span></div></div>
+                        <div>
+                            <h1>O NÁS</h1>
+                            <p class="atelier-info">
+                                Společnost AGE project, s.r.o. je projekční společnost založená a prosperující od roku 1995. Za více než 25 let působení realizovala desítky projektů a získala několik prestižních ocenění. Cílem naší společnosti je projektování rezidenčního bydlení a komerčních objektů a to jak formou spolupráce s developerskými společnostmi, tak i vytváření staveb pro individuální investory.
+                            </p>
+                            
+                            <div class="atelier-members">
+                                <h1 class="team">LIDÉ</h1>
+                                <div class="atelier-members-top">
+                                    <div class="atelier-member"><div><label>JIRKA</label><span>ZAKLADATEL SPOLEČNOSTI</span></div></div>
+                                    <div class="atelier-member"><div><label>MILAN</label><span>HLAVNÍ ARCHITEKT</span></div></div>
+                                    <div class="atelier-member"><div><label>PAVEL</label><span>HLAVNÍ INŽENÝR</span></div></div>
+                                    <div class="atelier-member"><div><label>ADEL</label><span>ARCHITEKT</span></div></div>
+                                    <div class="atelier-member"><div><label>VÍTEK</label><span>ARCHITEKT</span></div></div>
+                                    <div class="atelier-member"><div><label>HONZA</label><span>INŽENÝR</span></div></div>
+                                </div>
+                                <p class="atelier-members-more">
+                                    Jiří Smejkal, Kateřina Náhunková, Lucie Pachmanová, Pavel Matoušek, Jan Khýr, Jakub Sládek, Zuzana Mesmacque,
+                                    Kateřina Strnadová, Matěj Kopačka, Milan Čáslavský, Filip Korvas, Petr Rejnuš, Patrik Bužga, Martina Bártová, Petra
+                                    Nováková
+                                </p>
                             </div>
-                            <p class="atelier-members-more">
-                                Jiří Smejkal, Kateřina Náhunková, Lucie Pachmanová, Pavel Matoušek, Jan Khýr, Jakub Sládek, Zuzana Mesmacque,
-                                Kateřina Strnadová, Matěj Kopačka, Milan Čáslavský, Filip Korvas, Petr Rejnuš, Patrik Bužga, Martina Bártová, Petra
-                                Nováková
+                        </div>
+                    </div>
+                </div>
+                <div class="section" id="section-media" data-anchor="media">
+                    <div>
+                        <div>
+                            <h1>ČLÁNKY</h1>
+                            <ul>
+                                <li><a href="#">Et harum quidem rerum facilis.</a></li>
+                            </ul>
+                            <h1>OCENĚNÍ</h1>
+                            <ul>
+                                <li><a href="#">Stavba roku 2019 - Michle</a></li>
+                            </ul>
+                            <h1>INTERVIEW</h1>
+                            <ul>
+                                <li><a href="#">Integer in sapien. Et harum quidem rerum facilis est.</a></li>
+                                <li><a href="#">Duis aute irure dolor in reprehenderit.</a></li>
+                                <li><a href="#">Nullam faucibus mi quis velit.</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="section" id="section-career" data-anchor="career">
+                    <div>
+                        <div>
+                            <h1>KARIÉRA</h1>
+                            <p class="career-info">
+                                Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla pulvinar
+                                eleifend sem. Integer in sapien. Et harum quidem rerum facilis est et
+                                expedita distinctio. Fusce nibh. Aliquam erat volutpat. Donec quis nibh
+                                at felis congue commodo. Nullam faucibus mi quis velit. Fusce suscipit
+                                libero eget elit. Pellentesque arcu. Duis aute irure dolor in reprehenderit
+                                in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                            </p>
+                            <h2>SEZNAM NABÍZENÝCH POZIC</h2>
+                            <ul class="career-positions">
+                                <li>Architekt</li>
+                                <li>Stavař</li>
+                                <li>Recepční</li>
+                                <li>Vedoucí projektu</li>
+                            </ul>
+                            <h2>KONTAKTUJTE NÁS</h2>
+                            <p class="career-contact">
+                                Pro další informace nás kontaktujte na <a href="mailto:jobs@ageproject.cz">jobs@ageproject.cz</a>
                             </p>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="section" id="section-media" data-anchor="media">
-                <div>
-                    <div>
-                        <h1>ČLÁNKY</h1>
-                        <ul>
-                            <li><a href="#">Et harum quidem rerum facilis.</a></li>
-                        </ul>
-                        <h1>OCENĚNÍ</h1>
-                        <ul>
-                            <li><a href="#">Stavba roku 2019 - Michle</a></li>
-                        </ul>
-                        <h1>INTERVIEW</h1>
-                        <ul>
-                            <li><a href="#">Integer in sapien. Et harum quidem rerum facilis est.</a></li>
-                            <li><a href="#">Duis aute irure dolor in reprehenderit.</a></li>
-                            <li><a href="#">Nullam faucibus mi quis velit.</a></li>
-                        </ul>
+                <div class="section" id="section-contacts" data-anchor="contacts">
+                    <div id="mapPh">
+                        <div id="map-text">
+                            <h1>KONTAKTY</h1>
+                            <table>
+                                <tr><td>Plzeňská 2761/313</td><td><a href="mailto:ageproject@ageproject.cz">ageproject@ageproject.cz</a></td></tr>
+                                <tr><td>Praha 13 Stodůlky 155 00</td><td><a href="http://www.ageproject.cz">www.ageproject.cz</a></td></tr>
+                                <tr><td>Česká republika</td><td>+420 602 748 626</td></tr>
+                            </table>
+                        </div>
+                        <div id="map"></div>
                     </div>
-                </div>
-            </div>
-            <div class="section" id="section-career" data-anchor="career">
-                <div>
-                    <div>
-                        <h1>KARIÉRA</h1>
-                        <p class="career-info">
-                            Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla pulvinar
-                            eleifend sem. Integer in sapien. Et harum quidem rerum facilis est et
-                            expedita distinctio. Fusce nibh. Aliquam erat volutpat. Donec quis nibh
-                            at felis congue commodo. Nullam faucibus mi quis velit. Fusce suscipit
-                            libero eget elit. Pellentesque arcu. Duis aute irure dolor in reprehenderit
-                            in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                        </p>
-                        <h2>SEZNAM NABÍZENÝCH POZIC</h2>
-                        <ul class="career-positions">
-                            <li>Architekt</li>
-                            <li>Stavař</li>
-                            <li>Recepční</li>
-                            <li>Vedoucí projektu</li>
-                        </ul>
-                        <h2>KONTAKTUJTE NÁS</h2>
-                        <p class="career-contact">
-                            Pro další informace nás kontaktujte na <a href="mailto:jobs@ageproject.cz">jobs@ageproject.cz</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="section" id="section-contacts" data-anchor="contacts">
-                <div id="mapPh">
-                    <div id="map-text">
-                        <h1>KONTAKTY</h1>
-                        <table>
-                            <tr><td>Plzeňská 2761/313</td><td><a href="mailto:ageproject@ageproject.cz">ageproject@ageproject.cz</a></td></tr>
-                            <tr><td>Praha 13 Stodůlky 155 00</td><td><a href="http://www.ageproject.cz">www.ageproject.cz</a></td></tr>
-                            <tr><td>Česká republika</td><td>+420 602 748 626</td></tr>
-                        </table>
-                    </div>
-                    <div id="map"></div>
                 </div>
             </div>
         </div>
 
-        <div id="project-detail" style="display:none">
-            <div id="project-detail-main-image">
-                <h1></h1>
-                <img/>
-            </div>
-            <div id="project-detail-info">
-                
-            </div>
-            <div id="project-detail-images">
-
-            </div>
-        </div>
 
         <div id="loading-cover"><span>Naviguji ...</span></div>
     </div>
