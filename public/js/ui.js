@@ -343,6 +343,22 @@ $(function () {
     }
 
     function initBgImages(page, bgContainer, sectionName, progressForFirstImage) {
+        var linkTable = {};
+        linkTable[0] = 46;
+        linkTable[1] = 46;
+        linkTable[2] = 46;
+        linkTable[3] = 46;
+        linkTable[4] = 46;
+        linkTable[5] = 45;
+        linkTable[6] = 45;
+        linkTable[7] = 45;
+        linkTable[8] = 45;
+        linkTable[9] = 45;
+        linkTable[10] = 45;
+        linkTable[12] = 98;
+        linkTable[13] = 98;
+        linkTable[14] = 98;
+        linkTable[15] = 98;
         $.each(page.list, function (i, image) {
             var addInfo = "";
             if (image.actionTitle && image.actionUrl) {
@@ -360,7 +376,9 @@ $(function () {
                 '</div></div>');
 
             background.find('a').click(function() {
-                alert('go to detail');
+                if(linkTable[i]) {
+                    loadProjectDetail(linkTable[i]);
+                }
             });
             
             background.find('.fill').css('background-image', 'url(http://ageproject.radekmlada.com' + image.url + ')');

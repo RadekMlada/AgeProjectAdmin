@@ -2,6 +2,7 @@ var age = age || {};
 
 $(function () { 
     function showProjectDetail(projectDetail) {
+        $('.navbar-nav').find('.active').toggleClass('active');
         $('#projectsNav').parent().addClass('active');
         window.location.hash = '#'+projectDetail.id;
         $('#project-detail').css('display', 'block');
