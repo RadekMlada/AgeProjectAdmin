@@ -46,6 +46,34 @@ $(function() {
                 teamMemberContainer.append((tempI++>0 ? ', ' : '') + teamMember.attributes.Name);
             }
         }
+
+        var vacanciesData = age.vacanciesData;
+        var vacanciesContainer = $('#content_careerPositions');
+        for(var i = 0; i < vacanciesData.length; i++) {
+            var vacancy = vacanciesData[i];
+            var ele = $('<li>' + vacancy.attributes.Name + '</li>');
+            vacanciesContainer.append(ele);
+        }
+
+        var achievementTypesData = age.achievementTypesData;
+        var achievementsData = age.achievementsData;
+        var achievementsContainer = $('#content_achievements');
+        for(var i = 0; i < achievementTypesData.length; i++) {
+            var achievementType = achievementTypesData[i];
+            var achievementTypeName = achievementType.attributes.Name;
+            var ele = $('<h1>' + achievementTypeName + '</h1>');
+            achievementsContainer.append(ele);
+            ele = $('<ul></ul>');
+            achievementsContainer.append(ele);
+            for(var j = 0; j < achievementsData.length; j++) {
+                var achievement = achievementsData[j];
+                if(achievement.attributes.Type.data.attributes.Name != achievementTypeName) {
+                    continue;
+                }
+                var ele2 = $('<li><a href="' + achievement.attributes.Link + '">' + achievement.attributes.Name + '</a></li>');
+                ele.append(ele2);
+            }
+        }
     }
 
     age.renderWebsiteContent = renderWebsiteContent;
