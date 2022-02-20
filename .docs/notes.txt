@@ -1,0 +1,1 @@
+rsync -a public/ /storage/public/
