@@ -73,21 +73,19 @@ $(function () {
     });
 
     $('#menu a').click(function() {
+        var sectionName = $(this).parent().data('menuanchor');
         if(!age.isFullpage) {
             age.hideProjectDetail();
             showFullpage();
-            var sectionName = $(this).parent().data('menuanchor');
             $(document).scrollTop(age.scrollTop);
             if(sectionName == 'projects') {
                 return;
             }
-        }
-        //menu navigace funguje pouze pro slide 0
-        window.currentSlideIndex = 0;
-        var sectionName = $(this).parent().data('menuanchor');
-        setTimeout(function() {
+            setTimeout(function() {
                 fullPageMainPage.moveTo(sectionName);
-        }, 150);
+            }, 150);
+            
+        }
     });
 
     $('#logoPh').click(function() {
@@ -157,7 +155,7 @@ $(function () {
             licenseKey: 'FBC71F56-EC2B42A6-84BF5E79-B04FE81C',
             paralaxKey: '3FB6DAF9-3FBA4470-947C5F29-553D087F',
             sectionsColor: ['#000000', '#000000', '#000000', '#000000', '#000000', '#000000'],
-            anchors: anchors,
+            anchors: [],//anchors,
             lockAnchors: false,
             autoScrolling: false,
             menu: '#menu',
@@ -417,6 +415,10 @@ $(function () {
     //            duration: 2000
     //        });
     //});
+
+    $('.navbar-toggle').click(function() {
+        $('.navbar-collapse').toggleClass('in');
+    });
 
     $("#leftCarousel").click(carouselLeft);
     $("#rightCarousel").click(carouselRight);

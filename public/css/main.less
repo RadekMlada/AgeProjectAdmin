@@ -438,9 +438,12 @@ h6 {
     height: 50px;
 }
 
-@media (max-width:1050px) {
+@media only screen and (max-width: 1050px) {
     .logo {
-        width: 160px !important;
+        width: 160px !important; 
+    }
+    #mapPh #map-text h1 {
+        display: none;
     }
 }
 
@@ -499,6 +502,7 @@ h6 {
     #logoPh {
         position: absolute;
         display: block;
+        cursor: pointer;
         left: 4px;
         top: 4px;
         background-image: url('../images/logo_black.png');
@@ -508,8 +512,8 @@ h6 {
 .nav-link {
     padding-top: 19px !important;
     padding-bottom: 19px !important;
-    margin-left: 5px !important;
-    margin-right: 5px !important;
+    // margin-left: 5px !important;
+    // margin-right: 5px !important;
     -webkit-transition: background-color 200ms linear;
     -moz-transition: background-color 200ms linear;
     -o-transition: background-color 200ms linear;
@@ -519,6 +523,11 @@ h6 {
         background-color: rgba(0,0,0,0) !important;
     }
 }
+
+.in .navbar-nav {
+    background-color: rgba(255,255,255,0.7);
+}
+
 .navbar-nav .active {
     background-color: transparent !important;
 
@@ -743,7 +752,14 @@ a {
 
     #mapPh {
         #map {
-            top: 170px;
+            top: 90px;
+        }
+        #map-text {
+            padding: 10px 0;
+        }
+
+        table {
+            font-size: 90%;
         }
     }
 }
