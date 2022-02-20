@@ -37,6 +37,7 @@
             margin-bottom: 20px;
             display: flex;
             flex-wrap: wrap;
+            justify-content: center;
 
             & > div {
                 width: 120px;
@@ -47,22 +48,26 @@
                 text-align: center;
                 position: relative;
                 display:inline-block;
+                background-size: cover;
 
                 & > div {
                     width: 100%;
                     position: absolute;
-                    bottom: 10px;
-                    height: 60px;
+                    bottom: 0;
+                    background-color: rgba(255,255,255,0.8);
+                    font-weight: bold;
 
                     label {
                         display: block;
+                        font-size: 120%;
                         height: 20px;
                     }
 
                     span {
-                        height: 40px;
                         display: block;
+                        font-size: 65%;
                     }
+
                 }
             }
         }
