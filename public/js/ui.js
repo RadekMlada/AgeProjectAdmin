@@ -346,8 +346,7 @@ $(function () {
         $.each(page.list, function (i, image) {
             var addInfo = "";
             if (image.actionTitle && image.actionUrl) {
-                addInfo = '<a href="' + image.actionUrl + '">' +
-                    '<span class="row2"><span>' + image.actionTitle + '</span></span>' +
+                addInfo = '<a><span class="row2"><span>' + image.actionTitle + '</span></span>' +
                     '<span class="row1"><span class="fas fa-' + image.actionIcon + '"></span></span>' +
                     '</a >';
             }
@@ -359,12 +358,11 @@ $(function () {
                 '</div>' +
                 '<div class="page-label page-label-extended image-caption-' + sectionName + '"><a class="link"><span class="row2"><span>' + image.title + '</span></span><span class="row1"><i class="fas fa-chevron-right"></i></span></a>' +
                 '</div></div>');
-            
-            var link = background.find('.link');
-            link.click(function() {
-                alert('go to project detail');
-            });
 
+            background.find('a').click(function() {
+                alert('go to detail');
+            });
+            
             background.find('.fill').css('background-image', 'url(http://ageproject.radekmlada.com' + image.url + ')');
             if (i == 0) {
                 background.addClass('active');
