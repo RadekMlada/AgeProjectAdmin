@@ -8,10 +8,10 @@ $(function () {
         $('#project-detail').css('display', 'block');
         var projectDetailImage = $('#project-detail-main-image');
         if(projectDetail.images.length>0) {
-            projectDetailImage.find('img').prop('src', 'http://ageproject.radekmlada.com' + projectDetail.images[0].url);
+            projectDetailImage.find('img').prop('src', 'https://ageproject.radekmlada.com' + projectDetail.images[0].url);
         }
         for(var i = 1; i < projectDetail.images.length; i++) {
-            var ele = '<div><img src=\'' + 'http://ageproject.radekmlada.com' + projectDetail.images[i].url + '\'/></div>';
+            var ele = '<div><img src=\'' + 'https://ageproject.radekmlada.com' + projectDetail.images[i].url + '\'/></div>';
             $('#project-detail-images').append(ele);
         }
         projectDetailImage.find('h1').text(projectDetail.name);

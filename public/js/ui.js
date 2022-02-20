@@ -270,7 +270,7 @@ $(function () {
     age.loadWebsiteData();
     
     $.jsonp({
-        url: 'http://ageproject.radekmlada.com/handler/bgimages?js=true',
+        url: 'https://ageproject.radekmlada.com/handler/bgimages?js=true',
         dataType: 'jsonp',
         crossDomain: true,
         callback: 'initBgImages',
@@ -381,7 +381,7 @@ $(function () {
                 }
             });
             
-            background.find('.fill').css('background-image', 'url(http://ageproject.radekmlada.com' + image.url + ')');
+            background.find('.fill').css('background-image', 'url(https://ageproject.radekmlada.com' + image.url + ')');
             if (i == 0) {
                 background.addClass('active');
             }
@@ -389,7 +389,7 @@ $(function () {
             bgContainer.append(background);
         });
 
-        var firstPictureUrl = 'http://ageproject.radekmlada.com' + page.list[0].url;
+        var firstPictureUrl = 'https://ageproject.radekmlada.com' + page.list[0].url;
         loadImage(firstPictureUrl).done(function () {
             progressBar(100, progressForFirstImage, 'firstImage'+sectionName);
         });
@@ -443,7 +443,7 @@ $(function () {
     var projectFilters = null;
     var currentProjectFilter = {}
     $.jsonp({
-        url: 'http://ageproject.radekmlada.com/handler/projectFilter?js=true',
+        url: 'https://ageproject.radekmlada.com/handler/projectFilter?js=true',
         dataType: 'jsonp',
         crossDomain: true,
         callback: 'initFilters',
@@ -633,7 +633,7 @@ $(function () {
         var container = $('#projectListContainer');
         
         var item = "<a data-project-item-id='" + projectItem.id + "' class='projectItem"+((projectItem.previewId<0)?"empty":"")+"'><h3>" + projectItem.shortName + "</h3>";
-        var url = (projectItem.previewId <0) ? "images/house.png" : "http://ageproject.radekmlada.com/images/project/image_" +
+        var url = (projectItem.previewId <0) ? "images/house.png" : "https://ageproject.radekmlada.com/images/project/image_" +
             projectItem.id + '_' + projectItem.previewId + "_preview.jpg";
         //<img src='"+url+"' />
         item += "</a>";
@@ -695,7 +695,7 @@ $(function () {
     }
 
     $.jsonp({
-        url: 'http://ageproject.radekmlada.com/handler/projectPreviews?js=true',
+        url: 'https://ageproject.radekmlada.com/handler/projectPreviews?js=true',
         dataType: 'jsonp',
         crossDomain: true,
         callback: 'initProjects',
@@ -704,7 +704,7 @@ $(function () {
             progressBar(100, 10, 'projectThumbnails');
 
             projectItems = data;
-            projectItems.thumbnailUrl = 'http://ageproject.radekmlada.com' + data.thumbnailUrl + '?nocache=' + (new Date().getTime());
+            projectItems.thumbnailUrl = 'https://ageproject.radekmlada.com' + data.thumbnailUrl + '?nocache=' + (new Date().getTime());
 
             $.each(projectItems.list, function(i, projectItem) {
                 if(initialProject && initialProject.Id == projectItem.id) {
@@ -726,7 +726,7 @@ $(function () {
     });
 
     $.jsonp({
-        url: 'http://ageproject.radekmlada.com/handler/flashConfig?js=true',
+        url: 'https://ageproject.radekmlada.com/handler/flashConfig?js=true',
         dataType: 'jsonp',
         crossDomain: true,
         callback: 'initConfig',
@@ -753,8 +753,8 @@ $(function () {
         if (item.length == 0) {
             item = $('<div class="item">' +
                 '<div class="bg-fill"></div>'+
-                '<div class="fill" ' + (skipUrl ? '' : 'style="background-image:url(http://ageproject.radekmlada.com' + data.url + ')"') + '></div>' +
-                //'<img class="fill" src="http://ageproject.radekmlada.com' + data.url + '"/>' +
+                '<div class="fill" ' + (skipUrl ? '' : 'style="background-image:url(https://ageproject.radekmlada.com' + data.url + ')"') + '></div>' +
+                //'<img class="fill" src="https://ageproject.radekmlada.com' + data.url + '"/>' +
                 //((data.title) ? ('<h3 class="carousel-caption">'+data.title+'</h3>'):'')+
                 '</div>');
             container.append(item);
@@ -820,7 +820,7 @@ $(function () {
         
 
         var result = $.jsonp({
-            url: 'http://ageproject.radekmlada.com/handler/project/' + projectId + '?js=true',
+            url: 'https://ageproject.radekmlada.com/handler/project/' + projectId + '?js=true',
             dataType: 'jsonp',
             crossDomain: true,
             callback: 'initProject',
