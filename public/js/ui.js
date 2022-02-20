@@ -64,21 +64,6 @@ $(function () {
         $('#section-projects').toggleClass('with-header', isHeaderNear);
     }
 
-    age.initByHash = function (target, closeMenu) {
-        var initialHash = window.location.hash;
-        var url = null;
-        if (target && target.href) {
-            url = target.href.substring(target.href.indexOf('#') + 1);
-            initialHash = url;
-
-            if ($(target).parent().hasClass('nav-item'))
-                $(target).parent().addClass('active');
-        }
-
-        return false;
-    };
-    age.initByHash();
-
     $('#projectsNav').click(function () {
         //pokud jsme v sekci projekty a uživatel klikne v menu na projekty, tak ho navedeme na začátek/list projektů
         if ($("#section-projects").hasClass('active'))
@@ -102,7 +87,7 @@ $(function () {
         var sectionName = $(this).parent().data('menuanchor');
         setTimeout(function() {
                 fullPageMainPage.moveTo(sectionName);
-        }, 100);
+        }, 150);
     });
 
     $('#logoPh').click(function() {
@@ -146,6 +131,7 @@ $(function () {
     }
 
     var fullPageMainPage = null;
+    var anchors = ['home', 'projects', 'atelier', 'media', 'career', 'contacts'];
     function initFullpage(startSection, startIndex) {
         if (startSection) {
             $(".sections").removeClass('active');
@@ -156,8 +142,7 @@ $(function () {
                 $("#" + startSection).find('.slide').eq(startIndex).addClass('active');
             }
         }
-
-        var anchors = ['home', 'projects', 'atelier', 'media', 'career', 'contacts'];
+        
         age.isFullpage = true;
         return new fullpage('#fullpage', {
             //#9db667
@@ -165,7 +150,7 @@ $(function () {
             licenseKey: 'FBC71F56-EC2B42A6-84BF5E79-B04FE81C',
             paralaxKey: '3FB6DAF9-3FBA4470-947C5F29-553D087F',
             sectionsColor: ['#000000', '#000000', '#000000', '#000000', '#000000', '#000000'],
-            anchors: [],//anchors,
+            anchors: anchors,
             lockAnchors: false,
             autoScrolling: false,
             menu: '#menu',
@@ -199,7 +184,8 @@ $(function () {
     }
     function hideFullpage() {
         $('#fullpageWrapper').css('display', 'none');
-        fullPageMainPage.destroy('all');
+        if(fullPageMainPage)
+            fullPageMainPage.destroy('all');
         age.isFullpage = false;
     }
 
@@ -243,30 +229,34 @@ $(function () {
         loader.css({'transform': transform});
 
         setTimeout(function () {
-            fullPageMainPage = initFullpage();
-
             //zkusíme provést iniciální navigaci v případě, že url stránky při vstupu obsahuje hash sekce/slidu
-            var activeSectionId = 'home';
-            var activeIndex;
+            var activeSectionId = '';
+            var projectId = 0;
             if (location.hash && location.hash.indexOf) {
-                if (location.hash.indexOf('#about') === 0)
-                    activeSectionId = 'about';
-                else if (location.hash.indexOf('#projects') === 0)
-                    activeSectionId = 'projects';
-                else if (location.hash.indexOf('#contact') === 0)
-                    activeSectionId = 'contact';
-                var i = location.hash.indexOf('/');
-                if (i > 0) {
-                    var slideIndex = location.hash.substring(i + 1);
-                    if(!isNaN(slideIndex))
-                        activeIndex = parseInt(slideIndex);
+                for(var i = 0; i < anchors.length; i++) {
+                    if (location.hash.indexOf('#' + anchors[i]) === 0)
+                        activeSectionId = anchors[i];
+                }
+                if (!activeSectionId) {
+                    var projectIdStr = location.hash.substring(1);
+                    if(!isNaN(projectIdStr))
+                        projectId = parseInt(projectIdStr);
+                    else 
+                        activeSectionId = 'home';
                 }
             }
-
+            else {
+                activeSectionId = 'home';
+            }
+            
             $('#content').fadeIn(750, function () {
                 loader.remove();
-                rebuildFullpage();
-                fullPageMainPage.moveTo(activeSectionId, 0);
+                if(activeSectionId) {
+                    showFullpage();
+                    fullPageMainPage.moveTo(activeSectionId);
+                } else {
+                    loadProjectDetail(projectId);
+                }
             });
         }, 700);
     }
@@ -317,6 +307,8 @@ $(function () {
     }
 
     function carouselLoader(container, size, color, skipFadeIn) {
+        if(!container)
+            return;
         if (container.find('.sk-cube-grid').length)
             return;
 
@@ -352,6 +344,8 @@ $(function () {
     }
 
     function carouselLoaderEnd(container) {
+        if(!container)
+            return;
         container.find('.sk-cube-grid').remove();
     }
 
@@ -359,7 +353,7 @@ $(function () {
         $.each(page.list, function (i, image) {
             var addInfo = "";
             if (image.actionTitle && image.actionUrl) {
-                addInfo = '<a href="' + image.actionUrl + '" onclick="window.initByHash(this)">' +
+                addInfo = '<a href="' + image.actionUrl + '"' +
                     '<span class="row2"><span>' + image.actionTitle + '</span></span>' +
                     '<span class="row1"><span class="fas fa-' + image.actionIcon + '"></span></span>' +
                     '</a >';
@@ -669,7 +663,7 @@ $(function () {
             if (projectLoader) {
                 projectLoader.abort();
             }
-            projectLoader = loadProjectDetail(projectItem, slideIndex, function() { projectLoader = null; });
+            projectLoader = loadProjectDetail(projectItem.id, projectItem.element, function() { projectLoader = null; });
         });
 
         if(priority) {
@@ -829,19 +823,19 @@ $(function () {
         return container;
     }
 
-    function loadProjectDetail(projectItem, slideIndex, complete) {
-        carouselLoader(projectItem.element, null, null, true);
+    function loadProjectDetail(projectId, carouselElement, complete) {
+        carouselLoader(carouselElement, null, null, true);
         console.log('loading project detail started');
 
         var finish = function () {
             console.log('loading project detail finished');
-            carouselLoaderEnd(projectItem.element);
+            carouselLoaderEnd(carouselElement);
             if (complete) complete();
         }
         
 
         var result = $.jsonp({
-            url: 'http://ageproject.radekmlada.com/handler/project/' + projectItem.id + '?js=true',
+            url: 'http://ageproject.radekmlada.com/handler/project/' + projectId + '?js=true',
             dataType: 'jsonp',
             crossDomain: true,
             callback: 'initProject',
