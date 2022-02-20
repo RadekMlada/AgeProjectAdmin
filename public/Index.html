@@ -23,6 +23,8 @@
     <!--<script type="text/javascript" src="js/vendors/bootstrap.js"></script>-->
     <script type="text/javascript" src="js/vendors/fullpage.extensions.min.js"></script>
     <script type="text/javascript" src="js/vendors/fullpage.parallax.min.js"></script>
+    <script type="text/javascript" src="js/renderContent.js"></script>
+    <script type="text/javascript" src="js/dataService.js"></script>
     <script type="text/javascript" src="js/map.js?24112018b"></script>
     <script type="text/javascript" src="js/project-detail.js?24112018b"></script>
     <script type="text/javascript" src="js/ui.js?24112018b"></script>
@@ -169,7 +171,7 @@
     <div id="content" style="display:none">
         <div id="header">
             <div class="col-sm-10">
-                <a id="logoPh" class="logo" href="#home"></a>
+                <a id="logoPh" class="logo"></a>
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                         <!--<span class="glyphicon glyphicon-menu-hamburger"></span>onclick="window.initByHash(this, true)" -->
@@ -241,10 +243,8 @@
                 <div class="section" id="section-atelier" data-anchor="atelier">
                     <div>
                         <div>
-                            <h1>O NÁS</h1>
-                            <p class="atelier-info">
-                                Společnost AGE project, s.r.o. je projekční společnost založená a prosperující od roku 1995. Za více než 25 let působení realizovala desítky projektů a získala několik prestižních ocenění. Cílem naší společnosti je projektování rezidenčního bydlení a komerčních objektů a to jak formou spolupráce s developerskými společnostmi, tak i vytváření staveb pro individuální investory.
-                            </p>
+                            <h1 id="content_aboutTitle"></h1>
+                            <p class="atelier-info" id="content_aboutDescription"></p>
                             
                             <div class="atelier-members">
                                 <h1 class="team">LIDÉ</h1>
@@ -288,15 +288,8 @@
                 <div class="section" id="section-career" data-anchor="career">
                     <div>
                         <div>
-                            <h1>KARIÉRA</h1>
-                            <p class="career-info">
-                                Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla pulvinar
-                                eleifend sem. Integer in sapien. Et harum quidem rerum facilis est et
-                                expedita distinctio. Fusce nibh. Aliquam erat volutpat. Donec quis nibh
-                                at felis congue commodo. Nullam faucibus mi quis velit. Fusce suscipit
-                                libero eget elit. Pellentesque arcu. Duis aute irure dolor in reprehenderit
-                                in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                            </p>
+                            <h1 id="content_careerTitle"></h1>
+                            <p class="career-info" id="content_careerPitch"></p>
                             <h2>SEZNAM NABÍZENÝCH POZIC</h2>
                             <ul class="career-positions">
                                 <li>Architekt</li>
@@ -305,9 +298,7 @@
                                 <li>Vedoucí projektu</li>
                             </ul>
                             <h2>KONTAKTUJTE NÁS</h2>
-                            <p class="career-contact">
-                                Pro další informace nás kontaktujte na <a href="mailto:jobs@ageproject.cz">jobs@ageproject.cz</a>
-                            </p>
+                            <p class="career-contact" id="content_careerContact"></p>
                         </div>
                     </div>
                 </div>
@@ -316,9 +307,9 @@
                         <div id="map-text">
                             <h1>KONTAKTY</h1>
                             <table>
-                                <tr><td>Plzeňská 2761/313</td><td><a href="mailto:ageproject@ageproject.cz">ageproject@ageproject.cz</a></td></tr>
-                                <tr><td>Praha 13 Stodůlky 155 00</td><td><a href="http://www.ageproject.cz">www.ageproject.cz</a></td></tr>
-                                <tr><td>Česká republika</td><td>+420 602 748 626</td></tr>
+                                <tr><td id="content_contactStreet"></td><td id="content_contactEmail"></td></tr>
+                                <tr><td id="content_contactCity"></td><td id="content_contactWebsite"></td></tr>
+                                <tr><td>Česká republika</td><td id="content_contactPhone"></td></tr>
                             </table>
                         </div>
                         <div id="map"></div>

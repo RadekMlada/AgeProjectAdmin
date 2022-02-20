@@ -91,7 +91,13 @@ $(function () {
     });
 
     $('#logoPh').click(function() {
-        fullPageMainPage.moveTo('home');
+        if(!age.isFullpage) {
+            age.hideProjectDetail();
+            showFullpage();
+        }
+        setTimeout(function() {
+            fullPageMainPage.moveTo('home');
+        }, 150);
     });
 
     jQuery.getScript('https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyBSERrQ7rP_Wn3CmfZAHIFdWxZ-BXCp25k');
@@ -129,6 +135,7 @@ $(function () {
         clearTimeout(progressBarTimer);
         progressBarUpdate();
     }
+    age.progressBar = progressBar;
 
     var fullPageMainPage = null;
     var anchors = ['home', 'projects', 'atelier', 'media', 'career', 'contacts'];
@@ -227,7 +234,7 @@ $(function () {
 
         var transform = 'translate(-' + translateX + 'px,-' + translateY + 'px)';
         loader.css({'transform': transform});
-
+        age.renderWebsiteContent();
         setTimeout(function () {
             //zkusíme provést iniciální navigaci v případě, že url stránky při vstupu obsahuje hash sekce/slidu
             var activeSectionId = '';
@@ -262,7 +269,8 @@ $(function () {
     }
 
     progressBar(100, 0, 'page');
-
+    age.loadWebsiteData();
+    
     $.jsonp({
         url: 'http://ageproject.radekmlada.com/handler/bgimages?js=true',
         dataType: 'jsonp',
@@ -272,21 +280,8 @@ $(function () {
         success:
             function (pages) {
                 progressBar(100, 20, 'bgimages');
-                var thumbnailUrl = 'http://ageproject.radekmlada.com/DRead/publish/flash/handlerBgImagesThumb.jpg?nocache=' + (new Date()).getTime();
-                var thumbnail2Url = thumbnailUrl.replace('BgImages','ProfilImages');
-                loadImage(thumbnailUrl).done(function () {
-                    progressBar(100, 20, 'thumbnailImage');
-
-                    //inicializujeme slidy pro homepage
-                    initBgImages(pages[0], $('#section0 .imageThumbnails'), $('#section0'), thumbnailUrl, 'home', 15);
-
-                    ////pokud je nastaveno bg pro sekci projektů, nastavíme
-                    //if (pages[1] && pages[1].list[0] && pages[1].list[0].url)
-                    //    $('#projectListSlide').css('background-image', 'url(http://ageproject.radekmlada.com' + pages[1].list[0].url + ')');
-
-                    //inicializujeme slidy pro sekci o nás
-                    initBgImages(pages[2], $('#section1 .imageThumbnails'), $('#section1'), thumbnail2Url,'about',15);
-                });
+                //inicializujeme slidy pro homepage
+                initBgImages(pages[0], $('#section0'), 'home', 15);
             },
 
         error: function () {
@@ -349,11 +344,11 @@ $(function () {
         container.find('.sk-cube-grid').remove();
     }
 
-    function initBgImages(page, container, bgContainer, thumbnailUrl, sectionName, progressForFirstImage) {
+    function initBgImages(page, bgContainer, sectionName, progressForFirstImage) {
         $.each(page.list, function (i, image) {
             var addInfo = "";
             if (image.actionTitle && image.actionUrl) {
-                addInfo = '<a href="' + image.actionUrl + '"' +
+                addInfo = '<a href="' + image.actionUrl + '">' +
                     '<span class="row2"><span>' + image.actionTitle + '</span></span>' +
                     '<span class="row1"><span class="fas fa-' + image.actionIcon + '"></span></span>' +
                     '</a >';
@@ -364,47 +359,19 @@ $(function () {
                 '<div class="news-list page-label">' + 
                 addInfo +
                 '</div>' +
-                '<div class="page-label page-label-extended image-caption-' + sectionName + '"><a href="#home"><span class="row2"><span>' + image.title + '</span></span><span class="row1"><i class="fas fa-chevron-right"></i></span></a>' +
+                '<div class="page-label page-label-extended image-caption-' + sectionName + '"><a class="link"><span class="row2"><span>' + image.title + '</span></span><span class="row1"><i class="fas fa-chevron-right"></i></span></a>' +
                 '</div></div>');
-
-            var thumbnail = $('<li style="background-image:url(' + thumbnailUrl + ');' +
-                ' background-position-x: -' + image.thumbnailX +
-                'px; background-position-y: -' + image.thumbnailY +
-                'px;"></li>');
+            
+            var link = background.find('.link');
+            link.click(function() {
+                alert('go to project detail');
+            });
 
             background.find('.fill').css('background-image', 'url(http://ageproject.radekmlada.com' + image.url + ')');
             if (i == 0) {
                 background.addClass('active');
             }
 
-            thumbnail.click(function () {
-                if (image.loaded) {
-                    setTimeout(function () {
-                        console.log('thumbnail click - image loaded, moving slide');
-                        thumbnail.siblings('li').removeClass('active');
-                        thumbnail.addClass('active');
-                        thumbnail.addClass('moving');
-                        fullPageMainPage.moveTo(sectionName, i);
-                    }, 200);
-                    return;
-                }
-                console.log('thumbnail click - image not loaded, loading image');
-                var imageUrl = 'http://ageproject.radekmlada.com' + image.url;
-                var currentSlide = bgContainer.find('.active .fill');
-                carouselLoader(thumbnail, 20);
-                carouselLoader(currentSlide,100);
-
-                loadImage(imageUrl).done(function () {
-                    image.loaded = true;
-                    background.find('.fill').css('background-image', 'url(' + imageUrl + ')');
-                    carouselLoaderEnd(background.find('fill'));
-                    carouselLoaderEnd(thumbnail);
-                    carouselLoaderEnd(currentSlide);
-                    thumbnail.trigger('click');
-                });
-            });
-
-            container.append(thumbnail);
             bgContainer.append(background);
         });
 
