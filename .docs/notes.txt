@@ -1,1 +1,1 @@
-rsync -a public/ /storage/public/
+7

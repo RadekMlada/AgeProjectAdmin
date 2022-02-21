@@ -95,7 +95,7 @@ $(function() {
             }
         });
 
-        var query = `query {
+        var homepageQuery = `query {
             website {
                data {
                  attributes {
@@ -123,15 +123,63 @@ $(function() {
 
         $.post({
             url: '/graphql',
-            //dataType: 'application/json',
             contentType: 'application/json',
-            data: JSON.stringify({query}),
+            data: JSON.stringify({query: homepageQuery}),
             timeout: 60000,
             success:
                 function (data) {
                     age.progressBar(100, 50, 'pageData6');
                     console.log(data);
                     age.homepageData = data.data;
+                },
+    
+            error: function (ex, message) {
+                var that = this;
+                setTimeout(function () {
+                    $.post(that);
+                }, 1000);
+            }
+              
+        });
+
+        var projectsQuery = `query {
+            website {
+               data {
+                 attributes {
+                   Projects {
+                    Projects {
+                       Title,
+                      Project {
+                        data {
+                          attributes {
+                            Images {
+                              data {
+                                attributes {
+                                  url
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    } 
+          
+                  }
+                }
+              }
+            }
+          }`;
+
+          $.post({
+            url: '/graphql',
+            contentType: 'application/json',
+            data: JSON.stringify({query: projectsQuery}),
+            timeout: 60000,
+            success:
+                function (data) {
+                    age.progressBar(100, 50, 'pageData6');
+                    console.log(data);
+                    age.projectsData = data.data;
                 },
     
             error: function (ex, message) {
