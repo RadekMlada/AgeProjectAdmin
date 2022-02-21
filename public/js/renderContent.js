@@ -12,9 +12,62 @@ $(function() {
         var mailRegex = /([a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,4})/ig
         text  = text.replace(mailRegex, "<a href='mailto:$1'>$1</a>");
         return text;
-      }
+    }
+
+    function loadImage(url) {
+        return $.Deferred(function (task) {
+            var image = new Image();
+            image.onload = function () { task.resolve(image); };
+            image.onerror = function () { task.reject(); };
+            image.src = url;
+        }).promise();
+    }
+
+    function renderHome() {
+        var bgContainer = $('#section0');
+        var sectionName = 'home';
+        var progressForFirstImage = 15;
+        return;
+
+        $.each(age.homepageData, function (i, image) {
+            var addInfo = "";
+            if (image.actionTitle && image.actionUrl) {
+                addInfo = '<a><span class="row2"><span>' + image.actionTitle + '</span></span>' +
+                    '<span class="row1"><span class="fas fa-' + image.actionIcon + '"></span></span>' +
+                    '</a >';
+            }
+
+            var background = $('<div class="slide slide' + i + '">' +
+                '<div class="fill"></div>' +
+                '<div class="news-list page-label">' + 
+                addInfo +
+                '</div>' +
+                '<div class="page-label page-label-extended image-caption-' + sectionName + '"><a class="link"><span class="row2"><span>' + image.title + '</span></span><span class="row1"><i class="fas fa-chevron-right"></i></span></a>' +
+                '</div></div>');
+
+            background.find('a').click(function() {
+                if(linkTable[i]) {
+                    loadProjectDetail(linkTable[i]);
+                }
+            });
+            
+            background.find('.fill').css('background-image', 'url(https://ageproject.radekmlada.com' + image.url + ')');
+            if (i == 0) {
+                background.addClass('active');
+            }
+
+            bgContainer.append(background);
+        });
+
+        var firstPictureUrl = 'https://ageproject.radekmlada.com' + page.list[0].url;
+        loadImage(firstPictureUrl).done(function () {
+            progressBar(100, progressForFirstImage, 'firstImage'+sectionName);
+        });
+    }
 
     function renderWebsiteContent() {
+        renderHome();
+        
         var data = age.websiteData;
         var table = {};
 

@@ -268,36 +268,7 @@ $(function () {
 
     progressBar(100, 0, 'page');
     age.loadWebsiteData();
-    
-    $.jsonp({
-        url: 'https://ageproject.radekmlada.com/handler/bgimages?js=true',
-        dataType: 'jsonp',
-        crossDomain: true,
-        callback: 'initBgImages',
-        timeout: 60000,
-        success:
-            function (pages) {
-                progressBar(100, 20, 'bgimages');
-                //inicializujeme slidy pro homepage
-                initBgImages(pages[0], $('#section0'), 'home', 15);
-            },
 
-        error: function () {
-            var that = this;
-            setTimeout(function () {
-                $.jsonp(that);
-            }, 1000);
-        }
-    });
-
-    function loadImage(url) {
-        return $.Deferred(function (task) {
-            var image = new Image();
-            image.onload = function () { task.resolve(image); };
-            image.onerror = function () { task.reject(); };
-            image.src = url;
-        }).promise();
-    }
 
     function carouselLoader(container, size, color, skipFadeIn) {
         if(!container)
@@ -340,59 +311,6 @@ $(function () {
         if(!container)
             return;
         container.find('.sk-cube-grid').remove();
-    }
-
-    function initBgImages(page, bgContainer, sectionName, progressForFirstImage) {
-        var linkTable = {};
-        linkTable[0] = 46;
-        linkTable[1] = 46;
-        linkTable[2] = 46;
-        linkTable[3] = 46;
-        linkTable[4] = 46;
-        linkTable[5] = 45;
-        linkTable[6] = 45;
-        linkTable[7] = 45;
-        linkTable[8] = 45;
-        linkTable[9] = 45;
-        linkTable[10] = 45;
-        linkTable[12] = 98;
-        linkTable[13] = 98;
-        linkTable[14] = 98;
-        linkTable[15] = 98;
-        $.each(page.list, function (i, image) {
-            var addInfo = "";
-            if (image.actionTitle && image.actionUrl) {
-                addInfo = '<a><span class="row2"><span>' + image.actionTitle + '</span></span>' +
-                    '<span class="row1"><span class="fas fa-' + image.actionIcon + '"></span></span>' +
-                    '</a >';
-            }
-
-            var background = $('<div class="slide slide' + i + '">' +
-                '<div class="fill"></div>' +
-                '<div class="news-list page-label">' + 
-                addInfo +
-                '</div>' +
-                '<div class="page-label page-label-extended image-caption-' + sectionName + '"><a class="link"><span class="row2"><span>' + image.title + '</span></span><span class="row1"><i class="fas fa-chevron-right"></i></span></a>' +
-                '</div></div>');
-
-            background.find('a').click(function() {
-                if(linkTable[i]) {
-                    loadProjectDetail(linkTable[i]);
-                }
-            });
-            
-            background.find('.fill').css('background-image', 'url(https://ageproject.radekmlada.com' + image.url + ')');
-            if (i == 0) {
-                background.addClass('active');
-            }
-
-            bgContainer.append(background);
-        });
-
-        var firstPictureUrl = 'https://ageproject.radekmlada.com' + page.list[0].url;
-        loadImage(firstPictureUrl).done(function () {
-            progressBar(100, progressForFirstImage, 'firstImage'+sectionName);
-        });
     }
 
     function carouselLeft(e) {
@@ -440,198 +358,16 @@ $(function () {
     $("#rightCarousel").click(carouselRight);
 
     var projectItems = null;
-    var projectFilters = null;
-    var currentProjectFilter = {}
-    $.jsonp({
-        url: 'https://ageproject.radekmlada.com/handler/projectFilter?js=true',
-        dataType: 'jsonp',
-        crossDomain: true,
-        callback: 'initFilters',
-        timeout: 60000,
-        success:
-            function (filters) {
-                progressBar(100, 10, 'projectFilter');
-
-                projectFilters = filters;
-
-                var container = $('#filterContainer');
-                var index = 0;
-                var initItem = function (name, filterItems, filterId) {
-                    var section = $("<section><h3>" + name + "</h3><ul></ul></section>");
-                    var items = section.find("ul");
-                    container.append(section);
-
-                    $.each(filterItems, function (i, item) {
-                        var elementId = "projectFilter" + index++;
-                        var itemElement = $("<li id='" + elementId + "'>" + item.Name + "</li>");
-                        item.selected = false;
-                        item.elementId = '#' + elementId;
-                        itemElement.click(function () {  filterProjectItem(item, filterId); });
-                        items.append(itemElement);
-                    });
-                }
-
-                initItem("Konstrukce", filters.constructions, "constructionId");
-                initItem("Typy", filters.types, "typeId");
-                initItem("Fáze", filters.phases, "phaseId");
-                initItem("Roky", filters.years, "yearsId");
-
-                $('#filterContainer .button-reset').click(function () {
-                    return false;
-                    $('#filterContainer .button-reset-all').toggleClass('selected', false);
-                    $(this).toggleClass('selected',true);
-                    
-                    for (var filterId in currentProjectFilter) {
-                        var currentProjectItem = currentProjectFilter[filterId];
-                        if (currentProjectItem) {
-                            $(currentProjectItem.elementId).toggleClass("selected", false);
-                            currentProjectFilter[filterId] = null;
-                        }
-                    }
-
-                    clearProjectItems();
-                    $.each(projectItems.list, function (i, projectItem) {
-                        if (projectItem.isPreview == 1)
-                            initProjectItem(i, projectItem);
-                    });
-                    rebuildFullpage();
-                });
-
-                $('#filterContainer .button-reset-all').click(function () {
-                    return false;
-                    $('#filterContainer .button-reset').toggleClass('selected', false);
-                    $(this).toggleClass('selected', true);
-
-                    for (var filterId in currentProjectFilter) {
-                        var currentProjectItem = currentProjectFilter[filterId];
-                        if (currentProjectItem) {
-                            $(currentProjectItem.elementId).toggleClass("selected", false);
-                            currentProjectFilter[filterId] = null;
-                        }
-                    }
-
-                    clearProjectItems();
-                    $.each(projectItems.list, function (i, projectItem) {
-                        initProjectItem(i, projectItem);
-                    });
-                    rebuildFullpage();
-                });
-
-                $('#project-filters-toggle').click(function (e) {
-                    return false;
-                    $('#projectListSlide').toggleClass('filterClosed');
-                    setTimeout(function () { rebuildFullpage(); }, 1100);
-                });
-            },
-
-        error: function () {
-            var that = this;
-            setTimeout(function () {
-                $.jsonp(that);
-            }, 1000);
-        }
-    });
-
-    var clearProjectItems = function () {
-        var container = $('#projectListContainer');
-        container.html('');
-    }
-
-    function toggleProjectDrawer(expand) {
-        var detailSelector = $('#project-detail-container');
-        var toggleFilterSelector = $('#project-filters-toggle');
-        var containerSelector = $('#download');
-        var pivotSelector = $(window);
-        var difference = Math.round(pivotSelector.scrollTop() - containerSelector.offset().top);
-        var maxDifference = (containerSelector.height() - pivotSelector.height());
-
-
-        if (difference > 0) {
-            detailSelector.css('margin-top', difference + "px").css('position', '');
-            toggleFilterSelector.css('position', 'absolute').css('top', ((difference < maxDifference ? difference : maxDifference) + window.projectFilterToggleTop) + "px").css('right', 0);
-        }
-
-        var wWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0, $(window).width());
-        $('#project-drawer').stop().animate({
-            scrollLeft: expand ? wWidth : 0
-        }, 1000, 'easeInOutExpo', function () {
-            detailSelector.data('active', expand);
-            toggleFilterSelector.data('active', !expand);
-            if (difference > 0) {
-                detailSelector.css('margin-top', '');
-            }
-            if (!expand)
-                toggleFilterSelector.css('position', '').css('top', window.projectFilterToggleTop + 'px').css('right', "");
-            resizeUI();
-        });
-    }
-
-    window.toggleProjectDrawer = toggleProjectDrawer;
-
-    //klik na tlačítko projekty vrátí uživatele zpět na seznam projektů
-    $("#project-detail-container .project-back-button").click(function () {
-        if ($("#project-detail-container").data('active'))
-            toggleProjectDrawer(false);
-    });
-
-    $("#project-detail-content .glyphicon-remove").click(function () {
-        $(".projectDescription").toggle(500);
-        $(this).hide();
-        $("#project-detail-content .glyphicon-chevron-down").show();
-    });
-
-    $("#project-detail-content .glyphicon-chevron-down").click(function () {
-        $(".projectDescription").toggle(500);
-        $(this).hide();
-        $("#project-detail-content .glyphicon-remove").show();
-    });
-
-    function projectCarouselLeft(e) {
-        var nextItem = $('#project-carousel li.active').prev();
-        if (nextItem.length == 0) {
-            toggleProjectDrawer(false);
-            return;
-        }
-        if(e && e.preventDefault)
-            e.preventDefault();
-        nextItem.trigger('click', e);
-    }
-    function projectCarouselRight(e) {
-        var nextItem = $('#project-carousel li.active').next();
-        if (e && e.preventDefault)
-            e.preventDefault();
-        if(nextItem.length>0)
-            nextItem.trigger('click', e);
-    }
-
-    $("#projectCarouselLeft").click(projectCarouselLeft);
-    $("#projectCarouselRight").click(projectCarouselRight);
 
     //swipe left vrátí uživatele z detailu projektu na seznam projektů
     //var projectHammertimeEnabled = true;
     //var projectHammertime = new Hammer($("#project-detail-container")[0]);
     //projectHammertime.on('swipe', function (e) {
-    //    if (!projectHammertimeEnabled) return;
-    //    if (e.direction == 2) { //left
-    //        projectCarouselRight();
-    //        projectHammertimeEnabled = false;
-    //    } else if (e.direction == 4) {
-    //        if ($('#project-carousel li.active').data('slide-to') == 0 && $("#project-detail-container").data('active')) {
-    //            toggleProjectDrawer(false);
-    //        } else {
-    //            projectCarouselLeft();
-    //        }
-    //        projectHammertimeEnabled = false;
-    //    }
-    //    if (!projectHammertimeEnabled) {
-    //        setTimeout(function () { projectHammertimeEnabled = true; }, 100);
-    //    }
     //});
 
     var projectLoader = null;
     var initProjectItem = function (i, projectItem, priority) {
         var container = $('#projectListContainer');
-        
         var item = "<a data-project-item-id='" + projectItem.id + "' class='projectItem"+((projectItem.previewId<0)?"empty":"")+"'><h3>" + projectItem.shortName + "</h3>";
         var url = (projectItem.previewId <0) ? "images/house.png" : "https://ageproject.radekmlada.com/images/project/image_" +
             projectItem.id + '_' + projectItem.previewId + "_preview.jpg";
@@ -661,152 +397,36 @@ $(function () {
         return item;
     }
 
-    function filterProjectItems() {
-        return;
-        clearProjectItems();
-        $('#filterContainer .button-reset, #filterContainer .button-reset-all').toggleClass('selected', false);
-        var counter = 0;
-        $.each(projectItems.list, function (i, projectItem) {
-            var pass = true;
-            for (var filterId2 in currentProjectFilter) {
-                if (currentProjectFilter[filterId2] && projectItem.filterSettings[filterId2] != currentProjectFilter[filterId2].id)
-                    pass = false;
-            }
-            if (!pass) return;
-            initProjectItem(i, projectItem);
-            counter++;
-        });
-        setTimeout(function () {
-            rebuildFullpage();
-        }, 100);
-    }
+    // $.jsonp({
+    //     url: 'https://ageproject.radekmlada.com/handler/projectPreviews?js=true',
+    //     dataType: 'jsonp',
+    //     crossDomain: true,
+    //     callback: 'initProjects',
+    //     timeout: 60000,
+    //     success: function (data) {
+    //         progressBar(100, 10, 'projectThumbnails');
 
-    function filterProjectItem(projectItem, filterId) {
-        var currentProjectItem = currentProjectFilter[filterId];
-        if (currentProjectItem) {
-            $(currentProjectItem.elementId).toggleClass("selected", false);
-            currentProjectFilter[filterId] = null;
-        }
-        if (currentProjectItem != projectItem) {
-            currentProjectFilter[filterId] = projectItem;
-            $(projectItem.elementId).toggleClass("selected", true);
-        }
-        filterProjectItems();
-    }
+    //         projectItems = data;
+    //         projectItems.thumbnailUrl = 'https://ageproject.radekmlada.com' + data.thumbnailUrl + '?nocache=' + (new Date().getTime());
 
-    $.jsonp({
-        url: 'https://ageproject.radekmlada.com/handler/projectPreviews?js=true',
-        dataType: 'jsonp',
-        crossDomain: true,
-        callback: 'initProjects',
-        timeout: 60000,
-        success: function (data) {
-            progressBar(100, 10, 'projectThumbnails');
+    //         $.each(projectItems.list, function(i, projectItem) {
+    //             if(initialProject && initialProject.Id == projectItem.id) {
+    //                 initialProject.DataItem = projectItem;
+    //                 console.log(initialProject);
+    //                 initProjectItem(i, projectItem, true);
+    //             }
+    //             else if(projectItem.isPreview == 1)
+    //                 initProjectItem(i, projectItem);
+    //         });
+    //     },
 
-            projectItems = data;
-            projectItems.thumbnailUrl = 'https://ageproject.radekmlada.com' + data.thumbnailUrl + '?nocache=' + (new Date().getTime());
-
-            $.each(projectItems.list, function(i, projectItem) {
-                if(initialProject && initialProject.Id == projectItem.id) {
-                    initialProject.DataItem = projectItem;
-                    console.log(initialProject);
-                    initProjectItem(i, projectItem, true);
-                }
-                else if(projectItem.isPreview == 1)
-                    initProjectItem(i, projectItem);
-            });
-        },
-
-        error: function (a, b, c) {
-            var that = this;
-            setTimeout(function () {
-                $.jsonp(that);
-            }, 1000);
-        }
-    });
-
-    $.jsonp({
-        url: 'https://ageproject.radekmlada.com/handler/flashConfig?js=true',
-        dataType: 'jsonp',
-        crossDomain: true,
-        callback: 'initConfig',
-        timeout: 60000,
-        success:
-            function (data) {
-                $('#profil-text').html(data.ProfilText);
-                //$('#map-text pre').html(data.MapText);
-                progressBar(100, 10, 'flashConfig');
-            },
-
-        error: function () {
-            var that = this;
-            setTimeout(function () {
-                $.jsonp(that);
-            }, 1000);
-        }
-    });
-
-    function showProjectImage(data, id, skipUrl) {
-        id = id + 1;
-        var container = $('#section-projects .slide'+id);
-        var item = container.find('item');
-        if (item.length == 0) {
-            item = $('<div class="item">' +
-                '<div class="bg-fill"></div>'+
-                '<div class="fill" ' + (skipUrl ? '' : 'style="background-image:url(https://ageproject.radekmlada.com' + data.url + ')"') + '></div>' +
-                //'<img class="fill" src="https://ageproject.radekmlada.com' + data.url + '"/>' +
-                //((data.title) ? ('<h3 class="carousel-caption">'+data.title+'</h3>'):'')+
-                '</div>');
-            container.append(item);
-        } 
-        //$('.project-thumbnails .project-thumbnail').removeClass('active'); $('.project-thumbnails .thumbnail' + data.id).addClass('active');
-    }
-
-    function redrawSvg(container, img, id) {
-        var wWidth = $(window).width();
-        var wHeight = $(window).height();
-
-        var scaleX = wWidth / img.width;
-        var scaleY = wHeight / img.height;
-        var scale = scaleX > scaleY ? scaleX : scaleY;
-        var imageWidth = Math.round(img.width * scale);
-        var imageHeight = Math.round(img.height * scale);
-        var x = Math.round((wWidth - imageWidth) / 2);
-        var y = Math.round((wHeight - imageHeight) / 2);
-        var svg;
-
-        //$('.slide:not(.active)').find('svg.svg-fullscreen').remove();
-        container.find('svg').remove();
-        container.each(function (i) {
-            if(isMobile) {
-                svg = $("<div style='width: 100%; height: 100%; background-size: cover; background-position: center; background-image:url(\"" + img.src + "\"); filter: blur(15px);'></div>");
-            }
-            else {
-                svg = $('<svg class="svg-fullscreen" xmlns="http://www.w3.org/2000/svg"' +
-                    'xmlns:xlink="http://www.w3.org/1999/xlink"' +
-                    'width="' + wWidth + '" height="' + wHeight + '"' +
-                    'viewBox="0 0 ' + wWidth + ' ' + wHeight + '">' +
-                    '<filter id="blur' + id + '_'+i+'" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">' +
-                    '<feGaussianBlur stdDeviation="15 15" edgeMode="duplicate" />' +
-                        '<feColorMatrix type="saturate" values="0.5"/>'+
-                    '<feComponentTransfer>' +
-                    '<feFuncA type="discrete" tableValues="1 1" />' +
-                    '</feComponentTransfer>' +
-                    '</filter>' +
-                    '<image filter="url(#blur' + id + '_' + i +')" ' +
-                    'xlink:href="' + img.src + '"' +
-                    'x="' + x + '" y="' + y + '"' +
-                    'width="' + imageWidth + '" height="' + imageHeight + '"' +
-                    'preserveAspectRatio="xMinYMin slice"/>' +
-                    '</svg>');
-                svg.data('redraw', redrawSvg);
-            }
-            
-            $(this).append(svg)
-        });
-
-        return container;
-    }
+    //     error: function (a, b, c) {
+    //         var that = this;
+    //         setTimeout(function () {
+    //             $.jsonp(that);
+    //         }, 1000);
+    //     }
+    // });
 
     function loadProjectDetail(projectId, carouselElement, complete) {
         carouselLoader(carouselElement, null, null, true);

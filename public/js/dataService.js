@@ -16,7 +16,7 @@ $(function() {
             error: function () {
                 var that = this;
                 setTimeout(function () {
-                    $.json(that);
+                    $.get(that);
                 }, 1000);
             }
         });
@@ -35,7 +35,7 @@ $(function() {
             error: function () {
                 var that = this;
                 setTimeout(function () {
-                    $.json(that);
+                    $.get(that);
                 }, 1000);
             }
         });
@@ -46,7 +46,7 @@ $(function() {
             timeout: 60000,
             success:
                 function (data) {
-                    age.progressBar(100, 15, 'pageData3');
+                    age.progressBar(100, 10, 'pageData3');
                     //console.log(data);
                     age.vacanciesData = data.data;
                 },
@@ -54,7 +54,7 @@ $(function() {
             error: function () {
                 var that = this;
                 setTimeout(function () {
-                    $.json(that);
+                    $.get(that);
                 }, 1000);
             }
         });
@@ -66,14 +66,13 @@ $(function() {
             success:
                 function (data) {
                     age.progressBar(100, 5, 'pageData4');
-                    console.log(data);
                     age.achievementsData = data.data;
                 },
     
             error: function () {
                 var that = this;
                 setTimeout(function () {
-                    $.json(that);
+                    $.get(that);
                 }, 1000);
             }
         });
@@ -85,16 +84,63 @@ $(function() {
             success:
                 function (data) {
                     age.progressBar(100, 5, 'pageData5');
-                    console.log(data);
                     age.achievementTypesData = data.data;
                 },
     
             error: function () {
                 var that = this;
                 setTimeout(function () {
-                    $.json(that);
+                    $.get(that);
                 }, 1000);
             }
+        });
+
+        var query = `query {
+            website {
+               data {
+                 attributes {
+                   Homepage {
+                     Gallery {
+                       Title,
+                      Image {
+                        data {
+                          attributes {
+                            url
+                          }
+                        }
+                      },
+                      Project {
+                         data {
+                          id
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }`;
+
+        $.post({
+            url: '/graphql',
+            //dataType: 'application/json',
+            contentType: 'application/json',
+            data: JSON.stringify({query}),
+            timeout: 60000,
+            success:
+                function (data) {
+                    age.progressBar(100, 50, 'pageData6');
+                    console.log(data);
+                    age.homepageData = data.data;
+                },
+    
+            error: function (ex, message) {
+                var that = this;
+                setTimeout(function () {
+                    $.post(that);
+                }, 1000);
+            }
+              
         });
     }
 
