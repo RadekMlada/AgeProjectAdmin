@@ -68,8 +68,35 @@ $(function() {
         });
     }
 
+    var projectLoader = null;
+    var initProjectItem = function (projectId, title, imageUrl) {
+        var container = $('#projectListContainer');
+        var item = "<a class='projectItem'><h3>" + title + "</h3>";
+        item += "</a>";
+        var element = item = $(item);
+        item.css('backgroundImage', 'url(' + imageUrl + ')');
+        item.click(function (evnt, slideIndex) {
+            projectLoader = age.loadProjectDetail(projectId, element, function() { projectLoader = null; });
+        });
+
+        container.append(item);
+
+        return item;
+    }
+    
+
+    function renderProjects() {
+        $.each(age.projectsData.website.data.attributes.Projects.Projects, function (i, project) {
+            var imageUrl = project.Project.data.attributes.Images.data[0].attributes.url;
+            var title = project.Project.data.attributes.Title;
+            var projectId = project.Project.data.id;
+            initProjectItem(projectId, title, imageUrl);
+        });
+    }
+    
     function renderWebsiteContent() {
         renderHome();
+        renderProjects();
         
         var data = age.websiteData;
         var table = {};

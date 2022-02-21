@@ -194,6 +194,8 @@ $(function () {
         age.isFullpage = false;
     }
 
+    age.hideFullpage = hideFullpage;
+
     function showFullpage() {
         $('#fullpageWrapper').css('display', 'block');
         fullPageMainPage = initFullpage();
@@ -201,9 +203,13 @@ $(function () {
         age.isFullpage = true;
     }
 
+    age.showFullpage = showFullpage;
+
     function rebuildFullpage(startSection, startIndex) {
         fullPageMainPage.reBuild();
     }
+
+    age.rebuildFullpage = rebuildFullpage;
 
     var progressHidden = false;
     
@@ -307,11 +313,15 @@ $(function () {
             ele.fadeIn(200);
     }
 
+    age.carouselLoader = carouselLoader;
+
     function carouselLoaderEnd(container) {
         if(!container)
             return;
         container.find('.sk-cube-grid').remove();
     }
+
+    age.carouselLoaderEnd = carouselLoaderEnd;
 
     function carouselLeft(e) {
         var nextItem = $('.section.active .carousel-indicators li.active').prev();
@@ -357,122 +367,9 @@ $(function () {
     $("#leftCarousel").click(carouselLeft);
     $("#rightCarousel").click(carouselRight);
 
-    var projectItems = null;
-
     //swipe left vrátí uživatele z detailu projektu na seznam projektů
     //var projectHammertimeEnabled = true;
     //var projectHammertime = new Hammer($("#project-detail-container")[0]);
     //projectHammertime.on('swipe', function (e) {
     //});
-
-    var projectLoader = null;
-    var initProjectItem = function (i, projectItem, priority) {
-        var container = $('#projectListContainer');
-        var item = "<a data-project-item-id='" + projectItem.id + "' class='projectItem"+((projectItem.previewId<0)?"empty":"")+"'><h3>" + projectItem.shortName + "</h3>";
-        var url = (projectItem.previewId <0) ? "images/house.png" : "https://ageproject.radekmlada.com/images/project/image_" +
-            projectItem.id + '_' + projectItem.previewId + "_preview.jpg";
-        //<img src='"+url+"' />
-        item += "</a>";
-        projectItem.element = item = $(item);
-        item.css('backgroundImage', 'url(' + url + ')');
-        if(priority)
-            item.addClass('initial');
-        projectItem.previewUrl = url;
-        item.click(function (evnt, slideIndex) {
-            if (window.isMoving)
-                return;
-            if (projectLoader) {
-                projectLoader.abort();
-            }
-            projectLoader = loadProjectDetail(projectItem.id, projectItem.element, function() { projectLoader = null; });
-        });
-
-        if(priority) {
-            container.prepend(item);
-        }
-        else {
-            container.append(item);
-        }
-
-        return item;
-    }
-
-    // $.jsonp({
-    //     url: 'https://ageproject.radekmlada.com/handler/projectPreviews?js=true',
-    //     dataType: 'jsonp',
-    //     crossDomain: true,
-    //     callback: 'initProjects',
-    //     timeout: 60000,
-    //     success: function (data) {
-    //         progressBar(100, 10, 'projectThumbnails');
-
-    //         projectItems = data;
-    //         projectItems.thumbnailUrl = 'https://ageproject.radekmlada.com' + data.thumbnailUrl + '?nocache=' + (new Date().getTime());
-
-    //         $.each(projectItems.list, function(i, projectItem) {
-    //             if(initialProject && initialProject.Id == projectItem.id) {
-    //                 initialProject.DataItem = projectItem;
-    //                 console.log(initialProject);
-    //                 initProjectItem(i, projectItem, true);
-    //             }
-    //             else if(projectItem.isPreview == 1)
-    //                 initProjectItem(i, projectItem);
-    //         });
-    //     },
-
-    //     error: function (a, b, c) {
-    //         var that = this;
-    //         setTimeout(function () {
-    //             $.jsonp(that);
-    //         }, 1000);
-    //     }
-    // });
-
-    function loadProjectDetail(projectId, carouselElement, complete) {
-        carouselLoader(carouselElement, null, null, true);
-        console.log('loading project detail started');
-
-        var finish = function () {
-            console.log('loading project detail finished');
-            carouselLoaderEnd(carouselElement);
-            if (complete) complete();
-        }
-        
-
-        var result = $.jsonp({
-            url: 'https://ageproject.radekmlada.com/handler/project/' + projectId + '?js=true',
-            dataType: 'jsonp',
-            crossDomain: true,
-            callback: 'initProject',
-            timeout: 60000,
-            success:
-            function (data) {
-                if (result.aborted) {
-                    finish();
-                    return;
-                }
-
-                age.scrollTop = $(document).scrollTop();
-                hideFullpage();
-                age.showProjectDetail(data);
-                finish();
-                return;
-            },
-            error: function () {
-                var that = this;
-                setTimeout(function () {
-                    $.jsonp(that);
-                }, 1000);
-            }
-        });
-        var baseAbort = result.abort;
-        result.abort = function () {
-            result.aborted = true;
-            finish();
-            baseAbort.call(this);
-        }
-        return result;
-    }
-
-    age.loadProjectDetail = loadProjectDetail;
 });

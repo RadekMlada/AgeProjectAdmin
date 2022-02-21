@@ -128,8 +128,7 @@ $(function() {
             timeout: 60000,
             success:
                 function (data) {
-                    age.progressBar(100, 50, 'pageData6');
-                    console.log(data);
+                    age.progressBar(100, 25, 'pageData6');
                     age.homepageData = data.data;
                 },
     
@@ -147,11 +146,13 @@ $(function() {
                data {
                  attributes {
                    Projects {
-                    Projects {
+                    Projects (pagination: { start: 1, limit: 100 }) {
                        Title,
                       Project {
                         data {
+                        id,
                           attributes {
+                            Title,
                             Images {
                               data {
                                 attributes {
@@ -177,7 +178,7 @@ $(function() {
             timeout: 60000,
             success:
                 function (data) {
-                    age.progressBar(100, 50, 'pageData6');
+                    age.progressBar(100, 25, 'pageData7');
                     console.log(data);
                     age.projectsData = data.data;
                 },
@@ -190,6 +191,71 @@ $(function() {
             }
               
         });
+
+        var projectDetailQuery = `query {
+            project(id:17) {
+               data {
+                id,
+                attributes {
+                  Title,
+                  Description,
+                  Images {
+                    data {
+                      attributes {
+                        url
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }`;
+
+        function loadProjectDetail(projectId, carouselElement, complete) {
+            age.carouselLoader(carouselElement, null, null, true);
+            console.log('loading project detail ' + projectId + ' started');
+    
+            var finish = function () {
+                console.log('loading project detail finished');
+                age.carouselLoaderEnd(carouselElement);
+                if (complete) complete();
+            }
+    
+            var result = $.post({
+                url: '/graphql',
+                contentType: 'application/json',
+                data: JSON.stringify({query: projectDetailQuery}),
+                timeout: 60000,
+                success:
+                function (data) {
+                    if (result.aborted) {
+                        finish();
+                        return;
+                    }
+    
+                    age.scrollTop = $(document).scrollTop();
+                    age.hideFullpage();
+                    age.showProjectDetail(data);
+                    finish();
+                    return;
+                },
+                error: function () {
+                    var that = this;
+                    setTimeout(function () {
+                        $.jsonp(that);
+                    }, 1000);
+                }
+            });
+            var baseAbort = result.abort;
+            result.abort = function () {
+                result.aborted = true;
+                finish();
+                baseAbort.call(this);
+            }
+            return result;
+        }
+    
+        age.loadProjectDetail = loadProjectDetail;
     }
 
     age.loadWebsiteData = loadWebsiteData;

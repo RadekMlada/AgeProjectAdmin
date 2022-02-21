@@ -5,8 +5,8 @@ module.exports = [
     config: {
       contentSecurityPolicy: {
         directives: {
-          'script-src': ["'self'", "'unsafe-eval'", '*.ageproject.radekmlada.com', '*.googleapis.com', '*.gstatic.com'],
-          'img-src': ["'self'", 'data:', '*.ageproject.radekmlada.com', 'strapi.io', 'maps.gstatic.com', '*.googleapis.com', '*.ggpht.com'],
+          'script-src': ["'self'", "'unsafe-eval'", '*.googleapis.com', '*.gstatic.com'],
+          'img-src': ["'self'", 'data:', 'strapi.io', 'maps.gstatic.com', '*.googleapis.com', '*.ggpht.com'],
         },
       }
     },
