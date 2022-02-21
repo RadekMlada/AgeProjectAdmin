@@ -193,7 +193,7 @@ $(function() {
         });
 
         var projectDetailQuery = `query {
-            project(id:17) {
+            project(id:#projectId) {
                data {
                 id,
                 attributes {
@@ -224,7 +224,7 @@ $(function() {
             var result = $.post({
                 url: '/graphql',
                 contentType: 'application/json',
-                data: JSON.stringify({query: projectDetailQuery}),
+                data: JSON.stringify({query: projectDetailQuery.replace('#projectId', projectId)}),
                 timeout: 60000,
                 success:
                 function (data) {

@@ -266,7 +266,7 @@ $(function () {
                     showFullpage();
                     fullPageMainPage.moveTo(activeSectionId);
                 } else {
-                    loadProjectDetail(projectId);
+                    age.loadProjectDetail(projectId);
                 }
             });
         }, 700);

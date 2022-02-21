@@ -75,7 +75,7 @@ $(function() {
         item += "</a>";
         var element = item = $(item);
         item.css('backgroundImage', 'url(' + imageUrl + ')');
-        item.click(function (evnt, slideIndex) {
+        item.click(function () {
             projectLoader = age.loadProjectDetail(projectId, element, function() { projectLoader = null; });
         });
 
