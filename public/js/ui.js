@@ -268,36 +268,7 @@ $(function () {
 
     progressBar(100, 0, 'page');
     age.loadWebsiteData();
-    
-    $.jsonp({
-        url: 'https://ageproject.radekmlada.com/handler/bgimages?js=true',
-        dataType: 'jsonp',
-        crossDomain: true,
-        callback: 'initBgImages',
-        timeout: 60000,
-        success:
-            function (pages) {
-                progressBar(100, 20, 'bgimages');
-                //inicializujeme slidy pro homepage
-                initBgImages(pages[0], $('#section0'), 'home', 15);
-            },
 
-        error: function () {
-            var that = this;
-            setTimeout(function () {
-                $.jsonp(that);
-            }, 1000);
-        }
-    });
-
-    function loadImage(url) {
-        return $.Deferred(function (task) {
-            var image = new Image();
-            image.onload = function () { task.resolve(image); };
-            image.onerror = function () { task.reject(); };
-            image.src = url;
-        }).promise();
-    }
 
     function carouselLoader(container, size, color, skipFadeIn) {
         if(!container)
@@ -340,59 +311,6 @@ $(function () {
         if(!container)
             return;
         container.find('.sk-cube-grid').remove();
-    }
-
-    function initBgImages(page, bgContainer, sectionName, progressForFirstImage) {
-        var linkTable = {};
-        linkTable[0] = 46;
-        linkTable[1] = 46;
-        linkTable[2] = 46;
-        linkTable[3] = 46;
-        linkTable[4] = 46;
-        linkTable[5] = 45;
-        linkTable[6] = 45;
-        linkTable[7] = 45;
-        linkTable[8] = 45;
-        linkTable[9] = 45;
-        linkTable[10] = 45;
-        linkTable[12] = 98;
-        linkTable[13] = 98;
-        linkTable[14] = 98;
-        linkTable[15] = 98;
-        $.each(page.list, function (i, image) {
-            var addInfo = "";
-            if (image.actionTitle && image.actionUrl) {
-                addInfo = '<a><span class="row2"><span>' + image.actionTitle + '</span></span>' +
-                    '<span class="row1"><span class="fas fa-' + image.actionIcon + '"></span></span>' +
-                    '</a >';
-            }
-
-            var background = $('<div class="slide slide' + i + '">' +
-                '<div class="fill"></div>' +
-                '<div class="news-list page-label">' + 
-                addInfo +
-                '</div>' +
-                '<div class="page-label page-label-extended image-caption-' + sectionName + '"><a class="link"><span class="row2"><span>' + image.title + '</span></span><span class="row1"><i class="fas fa-chevron-right"></i></span></a>' +
-                '</div></div>');
-
-            background.find('a').click(function() {
-                if(linkTable[i]) {
-                    loadProjectDetail(linkTable[i]);
-                }
-            });
-            
-            background.find('.fill').css('background-image', 'url(https://ageproject.radekmlada.com' + image.url + ')');
-            if (i == 0) {
-                background.addClass('active');
-            }
-
-            bgContainer.append(background);
-        });
-
-        var firstPictureUrl = 'https://ageproject.radekmlada.com' + page.list[0].url;
-        loadImage(firstPictureUrl).done(function () {
-            progressBar(100, progressForFirstImage, 'firstImage'+sectionName);
-        });
     }
 
     function carouselLeft(e) {
@@ -479,98 +397,36 @@ $(function () {
         return item;
     }
 
-    $.jsonp({
-        url: 'https://ageproject.radekmlada.com/handler/projectPreviews?js=true',
-        dataType: 'jsonp',
-        crossDomain: true,
-        callback: 'initProjects',
-        timeout: 60000,
-        success: function (data) {
-            progressBar(100, 10, 'projectThumbnails');
+    // $.jsonp({
+    //     url: 'https://ageproject.radekmlada.com/handler/projectPreviews?js=true',
+    //     dataType: 'jsonp',
+    //     crossDomain: true,
+    //     callback: 'initProjects',
+    //     timeout: 60000,
+    //     success: function (data) {
+    //         progressBar(100, 10, 'projectThumbnails');
 
-            projectItems = data;
-            projectItems.thumbnailUrl = 'https://ageproject.radekmlada.com' + data.thumbnailUrl + '?nocache=' + (new Date().getTime());
+    //         projectItems = data;
+    //         projectItems.thumbnailUrl = 'https://ageproject.radekmlada.com' + data.thumbnailUrl + '?nocache=' + (new Date().getTime());
 
-            $.each(projectItems.list, function(i, projectItem) {
-                if(initialProject && initialProject.Id == projectItem.id) {
-                    initialProject.DataItem = projectItem;
-                    console.log(initialProject);
-                    initProjectItem(i, projectItem, true);
-                }
-                else if(projectItem.isPreview == 1)
-                    initProjectItem(i, projectItem);
-            });
-        },
+    //         $.each(projectItems.list, function(i, projectItem) {
+    //             if(initialProject && initialProject.Id == projectItem.id) {
+    //                 initialProject.DataItem = projectItem;
+    //                 console.log(initialProject);
+    //                 initProjectItem(i, projectItem, true);
+    //             }
+    //             else if(projectItem.isPreview == 1)
+    //                 initProjectItem(i, projectItem);
+    //         });
+    //     },
 
-        error: function (a, b, c) {
-            var that = this;
-            setTimeout(function () {
-                $.jsonp(that);
-            }, 1000);
-        }
-    });
-
-    function showProjectImage(data, id, skipUrl) {
-        id = id + 1;
-        var container = $('#section-projects .slide'+id);
-        var item = container.find('item');
-        if (item.length == 0) {
-            item = $('<div class="item">' +
-                '<div class="bg-fill"></div>'+
-                '<div class="fill" ' + (skipUrl ? '' : 'style="background-image:url(https://ageproject.radekmlada.com' + data.url + ')"') + '></div>' +
-                //'<img class="fill" src="https://ageproject.radekmlada.com' + data.url + '"/>' +
-                //((data.title) ? ('<h3 class="carousel-caption">'+data.title+'</h3>'):'')+
-                '</div>');
-            container.append(item);
-        } 
-        //$('.project-thumbnails .project-thumbnail').removeClass('active'); $('.project-thumbnails .thumbnail' + data.id).addClass('active');
-    }
-
-    function redrawSvg(container, img, id) {
-        var wWidth = $(window).width();
-        var wHeight = $(window).height();
-
-        var scaleX = wWidth / img.width;
-        var scaleY = wHeight / img.height;
-        var scale = scaleX > scaleY ? scaleX : scaleY;
-        var imageWidth = Math.round(img.width * scale);
-        var imageHeight = Math.round(img.height * scale);
-        var x = Math.round((wWidth - imageWidth) / 2);
-        var y = Math.round((wHeight - imageHeight) / 2);
-        var svg;
-
-        //$('.slide:not(.active)').find('svg.svg-fullscreen').remove();
-        container.find('svg').remove();
-        container.each(function (i) {
-            if(isMobile) {
-                svg = $("<div style='width: 100%; height: 100%; background-size: cover; background-position: center; background-image:url(\"" + img.src + "\"); filter: blur(15px);'></div>");
-            }
-            else {
-                svg = $('<svg class="svg-fullscreen" xmlns="http://www.w3.org/2000/svg"' +
-                    'xmlns:xlink="http://www.w3.org/1999/xlink"' +
-                    'width="' + wWidth + '" height="' + wHeight + '"' +
-                    'viewBox="0 0 ' + wWidth + ' ' + wHeight + '">' +
-                    '<filter id="blur' + id + '_'+i+'" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">' +
-                    '<feGaussianBlur stdDeviation="15 15" edgeMode="duplicate" />' +
-                        '<feColorMatrix type="saturate" values="0.5"/>'+
-                    '<feComponentTransfer>' +
-                    '<feFuncA type="discrete" tableValues="1 1" />' +
-                    '</feComponentTransfer>' +
-                    '</filter>' +
-                    '<image filter="url(#blur' + id + '_' + i +')" ' +
-                    'xlink:href="' + img.src + '"' +
-                    'x="' + x + '" y="' + y + '"' +
-                    'width="' + imageWidth + '" height="' + imageHeight + '"' +
-                    'preserveAspectRatio="xMinYMin slice"/>' +
-                    '</svg>');
-                svg.data('redraw', redrawSvg);
-            }
-            
-            $(this).append(svg)
-        });
-
-        return container;
-    }
+    //     error: function (a, b, c) {
+    //         var that = this;
+    //         setTimeout(function () {
+    //             $.jsonp(that);
+    //         }, 1000);
+    //     }
+    // });
 
     function loadProjectDetail(projectId, carouselElement, complete) {
         carouselLoader(carouselElement, null, null, true);
