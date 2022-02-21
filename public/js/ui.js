@@ -440,198 +440,16 @@ $(function () {
     $("#rightCarousel").click(carouselRight);
 
     var projectItems = null;
-    var projectFilters = null;
-    var currentProjectFilter = {}
-    $.jsonp({
-        url: 'https://ageproject.radekmlada.com/handler/projectFilter?js=true',
-        dataType: 'jsonp',
-        crossDomain: true,
-        callback: 'initFilters',
-        timeout: 60000,
-        success:
-            function (filters) {
-                progressBar(100, 10, 'projectFilter');
-
-                projectFilters = filters;
-
-                var container = $('#filterContainer');
-                var index = 0;
-                var initItem = function (name, filterItems, filterId) {
-                    var section = $("<section><h3>" + name + "</h3><ul></ul></section>");
-                    var items = section.find("ul");
-                    container.append(section);
-
-                    $.each(filterItems, function (i, item) {
-                        var elementId = "projectFilter" + index++;
-                        var itemElement = $("<li id='" + elementId + "'>" + item.Name + "</li>");
-                        item.selected = false;
-                        item.elementId = '#' + elementId;
-                        itemElement.click(function () {  filterProjectItem(item, filterId); });
-                        items.append(itemElement);
-                    });
-                }
-
-                initItem("Konstrukce", filters.constructions, "constructionId");
-                initItem("Typy", filters.types, "typeId");
-                initItem("Fáze", filters.phases, "phaseId");
-                initItem("Roky", filters.years, "yearsId");
-
-                $('#filterContainer .button-reset').click(function () {
-                    return false;
-                    $('#filterContainer .button-reset-all').toggleClass('selected', false);
-                    $(this).toggleClass('selected',true);
-                    
-                    for (var filterId in currentProjectFilter) {
-                        var currentProjectItem = currentProjectFilter[filterId];
-                        if (currentProjectItem) {
-                            $(currentProjectItem.elementId).toggleClass("selected", false);
-                            currentProjectFilter[filterId] = null;
-                        }
-                    }
-
-                    clearProjectItems();
-                    $.each(projectItems.list, function (i, projectItem) {
-                        if (projectItem.isPreview == 1)
-                            initProjectItem(i, projectItem);
-                    });
-                    rebuildFullpage();
-                });
-
-                $('#filterContainer .button-reset-all').click(function () {
-                    return false;
-                    $('#filterContainer .button-reset').toggleClass('selected', false);
-                    $(this).toggleClass('selected', true);
-
-                    for (var filterId in currentProjectFilter) {
-                        var currentProjectItem = currentProjectFilter[filterId];
-                        if (currentProjectItem) {
-                            $(currentProjectItem.elementId).toggleClass("selected", false);
-                            currentProjectFilter[filterId] = null;
-                        }
-                    }
-
-                    clearProjectItems();
-                    $.each(projectItems.list, function (i, projectItem) {
-                        initProjectItem(i, projectItem);
-                    });
-                    rebuildFullpage();
-                });
-
-                $('#project-filters-toggle').click(function (e) {
-                    return false;
-                    $('#projectListSlide').toggleClass('filterClosed');
-                    setTimeout(function () { rebuildFullpage(); }, 1100);
-                });
-            },
-
-        error: function () {
-            var that = this;
-            setTimeout(function () {
-                $.jsonp(that);
-            }, 1000);
-        }
-    });
-
-    var clearProjectItems = function () {
-        var container = $('#projectListContainer');
-        container.html('');
-    }
-
-    function toggleProjectDrawer(expand) {
-        var detailSelector = $('#project-detail-container');
-        var toggleFilterSelector = $('#project-filters-toggle');
-        var containerSelector = $('#download');
-        var pivotSelector = $(window);
-        var difference = Math.round(pivotSelector.scrollTop() - containerSelector.offset().top);
-        var maxDifference = (containerSelector.height() - pivotSelector.height());
-
-
-        if (difference > 0) {
-            detailSelector.css('margin-top', difference + "px").css('position', '');
-            toggleFilterSelector.css('position', 'absolute').css('top', ((difference < maxDifference ? difference : maxDifference) + window.projectFilterToggleTop) + "px").css('right', 0);
-        }
-
-        var wWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0, $(window).width());
-        $('#project-drawer').stop().animate({
-            scrollLeft: expand ? wWidth : 0
-        }, 1000, 'easeInOutExpo', function () {
-            detailSelector.data('active', expand);
-            toggleFilterSelector.data('active', !expand);
-            if (difference > 0) {
-                detailSelector.css('margin-top', '');
-            }
-            if (!expand)
-                toggleFilterSelector.css('position', '').css('top', window.projectFilterToggleTop + 'px').css('right', "");
-            resizeUI();
-        });
-    }
-
-    window.toggleProjectDrawer = toggleProjectDrawer;
-
-    //klik na tlačítko projekty vrátí uživatele zpět na seznam projektů
-    $("#project-detail-container .project-back-button").click(function () {
-        if ($("#project-detail-container").data('active'))
-            toggleProjectDrawer(false);
-    });
-
-    $("#project-detail-content .glyphicon-remove").click(function () {
-        $(".projectDescription").toggle(500);
-        $(this).hide();
-        $("#project-detail-content .glyphicon-chevron-down").show();
-    });
-
-    $("#project-detail-content .glyphicon-chevron-down").click(function () {
-        $(".projectDescription").toggle(500);
-        $(this).hide();
-        $("#project-detail-content .glyphicon-remove").show();
-    });
-
-    function projectCarouselLeft(e) {
-        var nextItem = $('#project-carousel li.active').prev();
-        if (nextItem.length == 0) {
-            toggleProjectDrawer(false);
-            return;
-        }
-        if(e && e.preventDefault)
-            e.preventDefault();
-        nextItem.trigger('click', e);
-    }
-    function projectCarouselRight(e) {
-        var nextItem = $('#project-carousel li.active').next();
-        if (e && e.preventDefault)
-            e.preventDefault();
-        if(nextItem.length>0)
-            nextItem.trigger('click', e);
-    }
-
-    $("#projectCarouselLeft").click(projectCarouselLeft);
-    $("#projectCarouselRight").click(projectCarouselRight);
 
     //swipe left vrátí uživatele z detailu projektu na seznam projektů
     //var projectHammertimeEnabled = true;
     //var projectHammertime = new Hammer($("#project-detail-container")[0]);
     //projectHammertime.on('swipe', function (e) {
-    //    if (!projectHammertimeEnabled) return;
-    //    if (e.direction == 2) { //left
-    //        projectCarouselRight();
-    //        projectHammertimeEnabled = false;
-    //    } else if (e.direction == 4) {
-    //        if ($('#project-carousel li.active').data('slide-to') == 0 && $("#project-detail-container").data('active')) {
-    //            toggleProjectDrawer(false);
-    //        } else {
-    //            projectCarouselLeft();
-    //        }
-    //        projectHammertimeEnabled = false;
-    //    }
-    //    if (!projectHammertimeEnabled) {
-    //        setTimeout(function () { projectHammertimeEnabled = true; }, 100);
-    //    }
     //});
 
     var projectLoader = null;
     var initProjectItem = function (i, projectItem, priority) {
         var container = $('#projectListContainer');
-        
         var item = "<a data-project-item-id='" + projectItem.id + "' class='projectItem"+((projectItem.previewId<0)?"empty":"")+"'><h3>" + projectItem.shortName + "</h3>";
         var url = (projectItem.previewId <0) ? "images/house.png" : "https://ageproject.radekmlada.com/images/project/image_" +
             projectItem.id + '_' + projectItem.previewId + "_preview.jpg";
@@ -661,39 +479,6 @@ $(function () {
         return item;
     }
 
-    function filterProjectItems() {
-        return;
-        clearProjectItems();
-        $('#filterContainer .button-reset, #filterContainer .button-reset-all').toggleClass('selected', false);
-        var counter = 0;
-        $.each(projectItems.list, function (i, projectItem) {
-            var pass = true;
-            for (var filterId2 in currentProjectFilter) {
-                if (currentProjectFilter[filterId2] && projectItem.filterSettings[filterId2] != currentProjectFilter[filterId2].id)
-                    pass = false;
-            }
-            if (!pass) return;
-            initProjectItem(i, projectItem);
-            counter++;
-        });
-        setTimeout(function () {
-            rebuildFullpage();
-        }, 100);
-    }
-
-    function filterProjectItem(projectItem, filterId) {
-        var currentProjectItem = currentProjectFilter[filterId];
-        if (currentProjectItem) {
-            $(currentProjectItem.elementId).toggleClass("selected", false);
-            currentProjectFilter[filterId] = null;
-        }
-        if (currentProjectItem != projectItem) {
-            currentProjectFilter[filterId] = projectItem;
-            $(projectItem.elementId).toggleClass("selected", true);
-        }
-        filterProjectItems();
-    }
-
     $.jsonp({
         url: 'https://ageproject.radekmlada.com/handler/projectPreviews?js=true',
         dataType: 'jsonp',
@@ -718,27 +503,6 @@ $(function () {
         },
 
         error: function (a, b, c) {
-            var that = this;
-            setTimeout(function () {
-                $.jsonp(that);
-            }, 1000);
-        }
-    });
-
-    $.jsonp({
-        url: 'https://ageproject.radekmlada.com/handler/flashConfig?js=true',
-        dataType: 'jsonp',
-        crossDomain: true,
-        callback: 'initConfig',
-        timeout: 60000,
-        success:
-            function (data) {
-                $('#profil-text').html(data.ProfilText);
-                //$('#map-text pre').html(data.MapText);
-                progressBar(100, 10, 'flashConfig');
-            },
-
-        error: function () {
             var that = this;
             setTimeout(function () {
                 $.jsonp(that);
