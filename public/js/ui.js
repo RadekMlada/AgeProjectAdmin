@@ -473,4 +473,6 @@ $(function () {
         }
         return result;
     }
+
+    age.loadProjectDetail = loadProjectDetail;
 });

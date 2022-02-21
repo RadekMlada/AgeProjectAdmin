@@ -27,31 +27,35 @@ $(function() {
         var bgContainer = $('#section0');
         var sectionName = 'home';
         var progressForFirstImage = 15;
-        return;
+        var firstPictureUrl = '';
 
-        $.each(age.homepageData, function (i, image) {
+        $.each(age.homepageData.website.data.attributes.Homepage.Gallery, function (i, image) {
+            var imageUrl = image.Image.data.attributes.url;
+            var projectId = image.Project.data.id;
+
+            if(i == 0)
+                firstPictureUrl = imageUrl;
+
             var addInfo = "";
-            if (image.actionTitle && image.actionUrl) {
-                addInfo = '<a><span class="row2"><span>' + image.actionTitle + '</span></span>' +
-                    '<span class="row1"><span class="fas fa-' + image.actionIcon + '"></span></span>' +
-                    '</a >';
-            }
+            // if (image.actionTitle && image.actionUrl) {
+            //     addInfo = '<a><span class="row2"><span>' + image.actionTitle + '</span></span>' +
+            //         '<span class="row1"><span class="fas fa-' + image.actionIcon + '"></span></span>' +
+            //         '</a >';
+            // }
 
             var background = $('<div class="slide slide' + i + '">' +
                 '<div class="fill"></div>' +
                 '<div class="news-list page-label">' + 
                 addInfo +
                 '</div>' +
-                '<div class="page-label page-label-extended image-caption-' + sectionName + '"><a class="link"><span class="row2"><span>' + image.title + '</span></span><span class="row1"><i class="fas fa-chevron-right"></i></span></a>' +
+                '<div class="page-label page-label-extended image-caption-' + sectionName + '"><a class="link"><span class="row2"><span>' + image.Title + '</span></span><span class="row1"><i class="fas fa-chevron-right"></i></span></a>' +
                 '</div></div>');
 
             background.find('a').click(function() {
-                if(linkTable[i]) {
-                    loadProjectDetail(linkTable[i]);
-                }
+                age.loadProjectDetail(projectId);
             });
             
-            background.find('.fill').css('background-image', 'url(https://ageproject.radekmlada.com' + image.url + ')');
+            background.find('.fill').css('background-image', 'url(' + imageUrl + ')');
             if (i == 0) {
                 background.addClass('active');
             }
@@ -59,9 +63,8 @@ $(function() {
             bgContainer.append(background);
         });
 
-        var firstPictureUrl = 'https://ageproject.radekmlada.com' + page.list[0].url;
         loadImage(firstPictureUrl).done(function () {
-            progressBar(100, progressForFirstImage, 'firstImage'+sectionName);
+            age.progressBar(100, progressForFirstImage, 'firstImage'+sectionName);
         });
     }
 
