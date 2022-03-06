@@ -14,6 +14,8 @@ $(function() {
         return text;
     }
 
+    age.createTextLinks = createTextLinks;
+
     function loadImage(url) {
         return $.Deferred(function (task) {
             var image = new Image();
@@ -31,7 +33,7 @@ $(function() {
 
         $.each(age.homepageData.website.data.attributes.Homepage.Gallery, function (i, image) {
             var imageUrl = image.Image.data.attributes.url;
-            var projectId = image.Project.data.id;
+            var projectId = image.Project.data ? image.Project.data.id : 0;
 
             if(i == 0)
                 firstPictureUrl = imageUrl;
@@ -51,9 +53,11 @@ $(function() {
                 '<div class="page-label page-label-extended image-caption-' + sectionName + '"><a class="link"><span class="row2"><span>' + image.Title + '</span></span><span class="row1"><i class="fas fa-chevron-right"></i></span></a>' +
                 '</div></div>');
 
-            background.find('a').click(function() {
-                age.loadProjectDetail(projectId);
-            });
+            if(projectId) {
+                background.find('a').click(function() {
+                    age.loadProjectDetail(projectId);
+                });
+            }
             
             background.find('.fill').css('background-image', 'url(' + imageUrl + ')');
             if (i == 0) {
@@ -133,9 +137,18 @@ $(function() {
         var vacanciesData = age.vacanciesData;
         var vacanciesContainer = $('#content_careerPositions');
         for(var i = 0; i < vacanciesData.length; i++) {
-            var vacancy = vacanciesData[i];
-            var ele = $('<li>' + vacancy.attributes.Name + '</li>');
-            vacanciesContainer.append(ele);
+            (function() { 
+                var vacancy = vacanciesData[i];
+                var ele = $('<li><a>' + vacancy.attributes.Name + '</a></li>');
+                ele.find('a').click(function() {
+                    age.scrollTop = $(document).scrollTop();
+                    age.hideFullpage();
+                    setTimeout(function() {
+                        age.showTeamPositionDetail(vacancy);
+                    }, 10);
+                });
+                vacanciesContainer.append(ele);
+            })();
         }
 
         var achievementTypesData = age.achievementTypesData;

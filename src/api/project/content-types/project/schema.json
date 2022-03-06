@@ -65,6 +65,18 @@
       "type": "component",
       "repeatable": false,
       "component": "content-type.project-award"
+    },
+    "Vacancies": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::vacancy.vacancy",
+      "inversedBy": "Projects"
+    },
+    "Achievements": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::achievement.achievement",
+      "mappedBy": "Project"
     }
   }
 }

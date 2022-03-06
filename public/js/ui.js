@@ -1,4 +1,8 @@
 ﻿var age = age || {};
+$(document).on( 'scroll', function(){
+    console.log('Event Fired');
+ });
+
 
 $(function () {
     var resetViewport = function () {
@@ -26,11 +30,6 @@ $(function () {
         isMobil = true;
     }
 
-    function msieversion() {
-        var msie = window.navigator.userAgent.indexOf("MSIE ");
-        return (msie > -1 || !!navigator.userAgent.match(/Trident.*rv\:11\./))  // If Internet Explorer, return version number
-    }
-
     // polyfill na max scroll values
     (function (elmProto) {
         if ('scrollTopMax' in elmProto) {
@@ -51,10 +50,7 @@ $(function () {
     }
     )(Element.prototype);
 
-    var isMobile = !msieversion();
-    var initialProject = null;
     document.addEventListener('wheel', this.onMouseWheel, { passive: false });
-
     window.addEventListener("scroll", onWindowScroll);
     function onWindowScroll() {
         var pivotSelector = $(window);
@@ -75,22 +71,24 @@ $(function () {
     $('#menu a').click(function() {
         var sectionName = $(this).parent().data('menuanchor');
         if(!age.isFullpage) {
+            var detail = age.detail;
             age.hideProjectDetail();
+            age.hideTeamPositionDetail();
             showFullpage();
             $(document).scrollTop(age.scrollTop);
-            if(sectionName == 'projects') {
+            if((sectionName == 'projects' && detail == 'project') || (sectionName == 'career' && detail == 'team-position')) {
                 return;
             }
             setTimeout(function() {
                 fullPageMainPage.moveTo(sectionName);
             }, 150);
-            
         }
     });
 
     $('#logoPh').click(function() {
         if(!age.isFullpage) {
             age.hideProjectDetail();
+            age.hideTeamPositionDetail();
             showFullpage();
         }
         setTimeout(function() {
@@ -162,7 +160,7 @@ $(function () {
             scrollOverflow: false,
             css3: false,
             scrollingSpeed: 700,
-            fitToSection: true,
+            fitToSection: false,
             fitToSectionDelay: 500,
             scrollBar: false,
             easing: 'easeInOutCubic',
@@ -192,6 +190,7 @@ $(function () {
         if(fullPageMainPage)
             fullPageMainPage.destroy('all');
         age.isFullpage = false;
+        $(document).scrollTop(0);
     }
 
     age.hideFullpage = hideFullpage;
@@ -243,17 +242,30 @@ $(function () {
             //zkusíme provést iniciální navigaci v případě, že url stránky při vstupu obsahuje hash sekce/slidu
             var activeSectionId = '';
             var projectId = 0;
+            var vacancy = null;
             if (location.hash && location.hash.indexOf) {
-                for(var i = 0; i < anchors.length; i++) {
-                    if (location.hash.indexOf('#' + anchors[i]) === 0)
-                        activeSectionId = anchors[i];
+                var detailIdStr = location.hash.substring(1);
+                if(!isNaN(detailIdStr))
+                    projectId = parseInt(detailIdStr);
+                else if(detailIdStr && detailIdStr.indexOf && detailIdStr.indexOf('career') == 0) {
+                    detailIdStr = location.hash.substring(8);
+                    if(!isNaN(detailIdStr)) {
+                        var teamPositionId = parseInt(detailIdStr);
+                        for(var i = 0; i< age.vacanciesData.length; i++) {
+                            if(age.vacanciesData[i].id == teamPositionId) {
+                                vacancy = age.vacanciesData[i];
+                            }
+                        }
+                    }
                 }
-                if (!activeSectionId) {
-                    var projectIdStr = location.hash.substring(1);
-                    if(!isNaN(projectIdStr))
-                        projectId = parseInt(projectIdStr);
-                    else 
-                        activeSectionId = 'home';
+                if(!projectId && !vacancy) {
+                    for(var i = 0; i < anchors.length; i++) {
+                        if (location.hash.indexOf('#' + anchors[i]) === 0)
+                            activeSectionId = anchors[i];
+                    }
+
+                    if(!activeSectionId)
+                    activeSectionId = 'home';
                 }
             }
             else {
@@ -265,8 +277,11 @@ $(function () {
                 if(activeSectionId) {
                     showFullpage();
                     fullPageMainPage.moveTo(activeSectionId);
-                } else {
+                } else if(projectId) {
                     age.loadProjectDetail(projectId);
+                }
+                else if(vacancy) {
+                    age.showTeamPositionDetail(vacancy);
                 }
             });
         }, 700);
