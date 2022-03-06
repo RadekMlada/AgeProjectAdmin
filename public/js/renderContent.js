@@ -128,7 +128,9 @@ $(function() {
         for(var i = 0; i < teamMembersData.length; i++) {
             var teamMember = teamMembersData[i];
             if(teamMember.attributes.MainDisplay == true) {
-                var ele = $('<div class="atelier-member" style="background-image:url(\'' + teamMember.attributes.Avatar.data.attributes.url + '\')"><div ><label>'+ teamMember.attributes.Name +'</label><span>'+ teamMember.attributes.Position +'</span></div></div>')
+                var imageUrl = teamMember.attributes.Avatar.data ? teamMember.attributes.Avatar.data.attributes.url : '/images/head.png';
+                var ele = $('<div class="atelier-member" style="background-image:url(\'' + imageUrl + '\')"><div ><label>'+ teamMember.attributes.Name +'</label><span>'+ teamMember.attributes.Position +'</span></div></div>')
+                
                 teamMemberContainerTop.append(ele);
             } else {
                 teamMemberContainer.append((tempI++>0 ? ', ' : '') + teamMember.attributes.Name);
