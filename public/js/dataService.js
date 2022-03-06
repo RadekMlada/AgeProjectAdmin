@@ -279,6 +279,7 @@ $(function() {
     
                     age.scrollTop = $(document).scrollTop();
                     age.hideFullpage();
+                    age.hideTeamPositionDetail();
                     age.showProjectDetail(data);
                     finish();
                     return;
