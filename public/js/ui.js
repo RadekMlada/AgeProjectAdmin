@@ -63,13 +63,13 @@ $(function () {
         $('#section-projects').toggleClass('with-header', isHeaderNear);
     }
 
-    $('#projectsNav').click(function () {
-        //pokud jsme v sekci projekty a uživatel klikne v menu na projekty, tak ho navedeme na začátek/list projektů
-        if ($("#section-projects").hasClass('active'))
-            fullPageMainPage.moveTo('projects', 0);
+    // $('#projectsNav').click(function () {
+    //     //pokud jsme v sekci projekty a uživatel klikne v menu na projekty, tak ho navedeme na začátek/list projektů
+    //     if ($("#section-projects").hasClass('active'))
+    //         fullPageMainPage.moveTo('projects', 0);
 
-        $("#section-projects .fp-scrollable").css('transform', 'translate(0px, 0px)');
-    });
+    //     $("#section-projects .fp-scrollable").css('transform', 'translate(0px, 0px)');
+    // });
 
     $('#menu a').click(function(event) {
         var sectionName = $(this).parent().data('menuanchor');
@@ -78,17 +78,16 @@ $(function () {
             age.hideProjectDetail();
             age.hideTeamPositionDetail();
             showFullpage(sectionName);
-            $(document).scrollTop(age.scrollTop);
-            if((sectionName == 'projects' && detail == 'project') || (sectionName == 'career' && detail == 'team-position')) {
-                event.preventDefault();
-                fullPageMainPage.silentMoveTo(sectionName);
+            fullPageMainPage.moveTo(sectionName);
+            //$("#section-projects .fp-scrollable").css('transform', 'translate(0px, 0px)');
+            if((sectionName == 'projects' && detail == 'project')) {
                 $(document).scrollTop(age.scrollTop);
-                return;
             }
-            setTimeout(function() {
-                $(document).scrollTop(age.scrollTop);
-                fullPageMainPage.moveTo(sectionName);
-            }, 150);
+
+            // setTimeout(function() {
+            //      fullPageMainPage.moveTo(sectionName);
+            //      $("#section-projects .fp-scrollable").css('transform', 'translate(0px, 0px)');
+            // }, 150);
         }
 
         $('.navbar-collapse.in').toggleClass('in', false);
@@ -155,23 +154,27 @@ $(function () {
         if (startSection) {
             $(".section").removeClass('active');
             $("#section-" + startSection).addClass('active');
+            var navItems = $('.nav-item');
+            navItems.removeClass('active');
+            navItems.parent().find('*[data-menuanchor="'+startSection+'"]').addClass('active');
+            $("#section-" + startSection).addClass('active');
 
             if (startIndex) {
                 $('.slide').removeClass('active');
-                $("#" + startSection).find('.slide').eq(startIndex).addClass('active');
+                $('').addClass('active');
             }
         }
         
         age.isFullpage = true;
         toggleAutoHeight();
 
-        return new fullpage('#fullpage', {
+        var fullPage = new fullpage('#fullpage', {
             //#9db667
             //#b8d555
             licenseKey: 'FBC71F56-EC2B42A6-84BF5E79-B04FE81C',
             paralaxKey: '3FB6DAF9-3FBA4470-947C5F29-553D087F',
             sectionsColor: ['#000000', '#000000', '#000000', '#000000', '#000000', '#000000'],
-            anchors: anchors,
+            anchors: [],//anchors,
             lockAnchors: false,
             autoScrolling: false,
             menu: '#menu',
@@ -202,10 +205,12 @@ $(function () {
                 window.currentIndex = toSlide.index;
             }
         });
+
+        return fullPage;
     }
     function hideFullpage() {
         $('#fullpageWrapper').css('display', 'none');
-        if(fullPageMainPage)
+        if(fullPageMainPage && fullPageMainPage.destroy)
             fullPageMainPage.destroy('all');
         age.isFullpage = false;
         $(document).scrollTop(0);

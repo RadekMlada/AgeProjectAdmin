@@ -80,6 +80,7 @@ $(function() {
         var element = item = $(item);
         item.css('backgroundImage', 'url(' + imageUrl + ')');
         item.click(function () {
+            age.scrollTop = $(document).scrollTop();
             projectLoader = age.loadProjectDetail(projectId, element, function() { projectLoader = null; });
         });
 
@@ -141,7 +142,6 @@ $(function() {
                 var vacancy = vacanciesData[i];
                 var ele = $('<li><a>' + vacancy.attributes.Name + '</a></li>');
                 ele.find('a').click(function() {
-                    age.scrollTop = $(document).scrollTop();
                     age.hideFullpage();
                     setTimeout(function() {
                         age.showTeamPositionDetail(vacancy);
@@ -166,8 +166,16 @@ $(function() {
                 if(achievement.attributes.Type.data.attributes.Name != achievementTypeName) {
                     continue;
                 }
-                var ele2 = $('<li><a href="' + achievement.attributes.Link + '">' + achievement.attributes.Name + '</a></li>');
+                var ele2 = $('<li class="icon-' + achievement.attributes.Icon + '"><a href="' + achievement.attributes.Link + '">' + achievement.attributes.Name + '</a></li>');
                 ele.append(ele2);
+                if(achievement.attributes.Project) {
+                    (function() { 
+                        var project = achievement.attributes.Project;
+                        ele2.find('a').click(function(e) {
+                            age.loadProjectDetail(project.data.id);
+                            e.preventDefault();
+                    })})();
+                }
             }
         }
     }
