@@ -168,7 +168,11 @@ $(function() {
                 if(achievement.attributes.Type.data.attributes.Name != achievementTypeName) {
                     continue;
                 }
-                var ele2 = $('<li class="icon-' + achievement.attributes.Icon + '"><a href="' + achievement.attributes.Link + '">' + achievement.attributes.Name + '</a></li>');
+                var ele2str = '<li class="icon-' + achievement.attributes.Icon + '"><a href="#">' + achievement.attributes.Name + '</a></li>';
+                if(achievement.attributes.Link) {
+                    ele2str = '<li class="icon-' + achievement.attributes.Icon + '"><a target="_blank" href="' + achievement.attributes.Link + '">' + achievement.attributes.Name + '</a></li>';
+                }
+                var ele2 = $(ele2str);
                 ele.append(ele2);
                 if(achievement.attributes.Project) {
                     (function() { 
