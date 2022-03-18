@@ -21,6 +21,8 @@ $(function () {
         }
         projectDetailImage.find('h1').text(title);
         $('body').css('background-color','#000');
+
+        age.detail = 'project';
     }
 
     function hideProjectDetail() {
@@ -30,6 +32,10 @@ $(function () {
         projectDetailImage.find('h1').text('');
         $('body').css('background-color','#ddd');
         $('#project-detail-images').html('');
+
+        if(age.detail == 'project') {
+            age.detail = '';
+        }
     }
     
     age.showProjectDetail = showProjectDetail;

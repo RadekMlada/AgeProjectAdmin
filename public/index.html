@@ -27,6 +27,8 @@
     <script type="text/javascript" src="js/dataService.js"></script>
     <script type="text/javascript" src="js/map.js?24112018b"></script>
     <script type="text/javascript" src="js/project-detail.js?24112018b"></script>
+    <script type="text/javascript" src="js/team-position-detail.js?24112018b"></script>
+    <script type="text/javascript" src="js/project-list-detail.js?24112018b"></script>
     <script type="text/javascript" src="js/ui.js?24112018b"></script>
     <script type="text/javascript" src="js/vendors/jquery.jsonp.js"></script>
     <script type="text/javascript" src="js/vendors/easings.js"></script>
@@ -191,13 +193,13 @@
                             <a class="nav-link" href="#projects" id="projectsNav">Projekty</a>
                         </li>
                         <li class="nav-item" data-menuanchor="atelier">
-                            <a class="nav-link" href="#atelier">Ateliér</a>
+                            <a class="nav-link" href="#atelier" id="atelierNav">Ateliér</a>
                         </li>
                         <li class="nav-item" data-menuanchor="media">
                             <a class="nav-link" href="#media">Média</a>
                         </li>
                         <li class="nav-item" data-menuanchor="career">
-                            <a class="nav-link" href="#career">Kariéra</a>
+                            <a class="nav-link" href="#career" id="careerNav">Kariéra</a>
                         </li>
                         <li class="nav-item" data-menuanchor="contacts">
                             <a class="nav-link" href="#contacts">Kontakty</a>
@@ -217,6 +219,19 @@
                 </div>
                 <div id="project-detail-images">
 
+                </div>
+            </div>
+        </div>
+        <div id="team-position-detail" style="display:none">
+            <div id="team-position-content">
+                <h1></h1>
+                <pre></pre>
+                <div id="team-position-image">
+                    <img/>
+                </div>
+                <div id="team-position-projects">
+                    <h2></h2>
+                    <div id="team-position-projects-content"></div>
                 </div>
             </div>
         </div>
@@ -240,7 +255,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="section fp-auto-height" id="section-atelier" data-anchor="atelier">
+                <div class="section" id="section-atelier" data-anchor="atelier">
                     <div>
                         <div>
                             <h1 id="content_aboutTitle"></h1>
@@ -254,12 +269,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="section fp-auto-height" id="section-media" data-anchor="media">
+                <div class="section" id="section-media" data-anchor="media">
                     <div>
                         <div id="content_achievements"></div>
                     </div>
                 </div>
-                <div class="section fp-auto-height" id="section-career" data-anchor="career">
+                <div class="section" id="section-career" data-anchor="career">
                     <div>
                         <div>
                             <h1 id="content_careerTitle"></h1>

@@ -51,6 +51,7 @@
 @import "section_atelier";
 @import "section_media";
 @import "project_detail";
+@import "team_position_detail";
 
 body {
     font-size: 14px;
@@ -88,6 +89,16 @@ h1 {
     margin: 0;
     padding: 0;
     color: #000000;
+}
+
+@media (max-width: 500px) {
+    h1 {
+        font-size: 30px;
+    }
+
+    h2 {
+        font-size: 25px;
+    }
 }
 
 h2 {
@@ -467,7 +478,7 @@ h6 {
     height: 58px;
     display: block;
     width: 100%;
-    z-index: 9;
+    z-index: 10000;
     color: #000000;
     padding: 0;
     background-color: rgba(255,255,255,.85);
@@ -492,7 +503,10 @@ h6 {
 
     .navbar-collapse {
         border-top-width: 0;
-        float: right;
+        float: right; 
+    }
+    .navbar-collapse.in {
+        z-index: 1000;
     }
 
     .icon-bar {

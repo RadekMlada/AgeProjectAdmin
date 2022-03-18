@@ -14,6 +14,8 @@ $(function() {
         return text;
     }
 
+    age.createTextLinks = createTextLinks;
+
     function loadImage(url) {
         return $.Deferred(function (task) {
             var image = new Image();
@@ -31,7 +33,7 @@ $(function() {
 
         $.each(age.homepageData.website.data.attributes.Homepage.Gallery, function (i, image) {
             var imageUrl = image.Image.data.attributes.url;
-            var projectId = image.Project.data.id;
+            var projectId = image.Project.data ? image.Project.data.id : 0;
 
             if(i == 0)
                 firstPictureUrl = imageUrl;
@@ -51,9 +53,11 @@ $(function() {
                 '<div class="page-label page-label-extended image-caption-' + sectionName + '"><a class="link"><span class="row2"><span>' + image.Title + '</span></span><span class="row1"><i class="fas fa-chevron-right"></i></span></a>' +
                 '</div></div>');
 
-            background.find('a').click(function() {
-                age.loadProjectDetail(projectId);
-            });
+            if(projectId) {
+                background.find('a').click(function() {
+                    age.loadProjectDetail(projectId);
+                });
+            }
             
             background.find('.fill').css('background-image', 'url(' + imageUrl + ')');
             if (i == 0) {
@@ -76,6 +80,7 @@ $(function() {
         var element = item = $(item);
         item.css('backgroundImage', 'url(' + imageUrl.replace('image_', 'medium_image_') + ')');
         item.click(function () {
+            age.scrollTop = $(document).scrollTop();
             projectLoader = age.loadProjectDetail(projectId, element, function() { projectLoader = null; });
         });
 
@@ -123,7 +128,9 @@ $(function() {
         for(var i = 0; i < teamMembersData.length; i++) {
             var teamMember = teamMembersData[i];
             if(teamMember.attributes.MainDisplay == true) {
-                var ele = $('<div class="atelier-member" style="background-image:url(\'' + teamMember.attributes.Avatar.data.attributes.url + '\')"><div ><label>'+ teamMember.attributes.Name +'</label><span>'+ teamMember.attributes.Position +'</span></div></div>')
+                var imageUrl = teamMember.attributes.Avatar.data ? teamMember.attributes.Avatar.data.attributes.url : '/images/head.png';
+                var ele = $('<div class="atelier-member" style="background-image:url(\'' + imageUrl + '\')"><div ><label>'+ teamMember.attributes.Name +'</label><span>'+ teamMember.attributes.Position +'</span></div></div>')
+                
                 teamMemberContainerTop.append(ele);
             } else {
                 teamMemberContainer.append((tempI++>0 ? ', ' : '') + teamMember.attributes.Name);
@@ -133,9 +140,17 @@ $(function() {
         var vacanciesData = age.vacanciesData;
         var vacanciesContainer = $('#content_careerPositions');
         for(var i = 0; i < vacanciesData.length; i++) {
-            var vacancy = vacanciesData[i];
-            var ele = $('<li>' + vacancy.attributes.Name + '</li>');
-            vacanciesContainer.append(ele);
+            (function() { 
+                var vacancy = vacanciesData[i];
+                var ele = $('<li><a>' + vacancy.attributes.Name + '</a></li>');
+                ele.find('a').click(function() {
+                    age.hideFullpage();
+                    setTimeout(function() {
+                        age.showTeamPositionDetail(vacancy);
+                    }, 10);
+                });
+                vacanciesContainer.append(ele);
+            })();
         }
 
         var achievementTypesData = age.achievementTypesData;
@@ -153,8 +168,16 @@ $(function() {
                 if(achievement.attributes.Type.data.attributes.Name != achievementTypeName) {
                     continue;
                 }
-                var ele2 = $('<li><a href="' + achievement.attributes.Link + '">' + achievement.attributes.Name + '</a></li>');
+                var ele2 = $('<li class="icon-' + achievement.attributes.Icon + '"><a href="' + achievement.attributes.Link + '">' + achievement.attributes.Name + '</a></li>');
                 ele.append(ele2);
+                if(achievement.attributes.Project) {
+                    (function() { 
+                        var project = achievement.attributes.Project;
+                        ele2.find('a').click(function(e) {
+                            age.loadProjectDetail(project.data.id);
+                            e.preventDefault();
+                    })})();
+                }
             }
         }
     }

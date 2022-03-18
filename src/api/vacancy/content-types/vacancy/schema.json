@@ -27,6 +27,18 @@
     },
     "Description": {
       "type": "richtext"
+    },
+    "Projects": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::project.project",
+      "inversedBy": "Vacancies"
+    },
+    "Achievements": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::achievement.achievement",
+      "mappedBy": "Vacancies"
     }
   }
 }

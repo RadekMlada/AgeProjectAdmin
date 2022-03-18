@@ -40,15 +40,59 @@ $(function() {
             }
         });
 
-        $.get({
-            url: '/api/vacancies?populate=%2A',
-            dataType: 'json',
-            timeout: 60000,
+        var vacanciesQuery = `query {
+            vacancies {
+            data {
+              id,
+              attributes {
+                Description,
+                Name,
+                Avatar {
+                  data {
+                    attributes {
+                      url
+                    }
+                  }
+                },
+                Projects {
+                  data {
+                    id,
+                    attributes {
+                      Title,
+                      Images (pagination: { start: 1, limit: 1 }) {
+                        data {
+                          attributes {
+                            url
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                Achievements {
+                  data {
+                    id,
+                    attributes {
+                      Name,
+                      Link
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }`;
+
+        $.post({
+          url: '/graphql',
+          contentType: 'application/json',
+          data: JSON.stringify({query: vacanciesQuery}),
+          timeout: 60000,
             success:
                 function (data) {
                     age.progressBar(100, 10, 'pageData3');
                     //console.log(data);
-                    age.vacanciesData = data.data;
+                    age.vacanciesData = data.data.vacancies.data;
                 },
     
             error: function () {
@@ -100,7 +144,7 @@ $(function() {
                data {
                  attributes {
                    Homepage {
-                     Gallery {
+                     Gallery (pagination: { start: 1, limit: 50 }) {
                        Title,
                       Image {
                         data {
@@ -146,7 +190,7 @@ $(function() {
                data {
                  attributes {
                    Projects {
-                    Projects (pagination: { start: 1, limit: 100 }) {
+                    Projects (pagination: { start: 1, limit: 200 }) {
                        Title,
                       Project {
                         data {
@@ -235,6 +279,7 @@ $(function() {
     
                     age.scrollTop = $(document).scrollTop();
                     age.hideFullpage();
+                    age.hideTeamPositionDetail();
                     age.showProjectDetail(data);
                     finish();
                     return;

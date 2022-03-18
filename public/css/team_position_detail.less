@@ -1,0 +1,142 @@
+#team-position-detail {
+    padding-top: 70px;
+    background-color: #000;
+
+    a {
+        color: #e74c3c;
+        font-weight: bold;
+    }
+    
+    h1 {
+        color: #e74c3c;
+        margin: 20px 0 35px 0;
+    }
+
+    h2 {
+        color: #e74c3c;
+        padding: 35px 0;
+        font-weight: 400;
+    }
+
+    pre {
+        width: 45%;
+        margin-top: 0px;
+        color: #fff;
+        text-align: justify;
+        background-color: transparent;
+        border-width: 0;
+        font-family: 'CentGoth';
+        display: block;
+        float:left;
+        padding: 20px 0;
+    }
+
+    .projectItem {
+        display: inline-block;
+        cursor: pointer;
+        width: 48%;
+        padding-top: 26%;
+        box-sizing: border-box;
+        position: relative;
+        margin: 0 2% 2% 0;
+        background-repeat: no-repeat;
+        background-size: cover;
+        border: solid 1px #fff;
+
+        h3 {
+            font-size: 120%;
+            margin: 0;
+            padding: 5px;
+            width: 100%;
+            color: #000000;
+            text-align: left;
+            text-transform: none;
+            background-color: rgba(255,255,255,.7);
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            z-index: 100;
+            position: absolute;
+            top: 0;
+            border-bottom: solid 1px #fff;
+        }
+
+        img {
+            -moz-border-radius: 0 !important;
+            -webkit-border-radius: 0 !important;
+            border-radius: 0 !important;
+            display: block;
+            width: 100%;
+            position: absolute;
+        }
+    }
+}
+
+#team-position-content {
+    max-width: 1160px;
+    position: relative;
+    margin: 0 auto;
+
+}
+
+#team-position-projects {
+    clear:both;
+}
+
+#team-position-image {
+    background-repeat: no-repeat;
+    background-size: cover;
+    border: solid 1px #fff;
+    position:relative;
+    width: 50%;
+    display:block;
+    float:left;
+    img {
+        -moz-border-radius: 0 !important;
+        -webkit-border-radius: 0 !important;
+        border-radius: 0 !important;
+        display: block;
+        width: 100%;
+    }
+}
+
+@media (max-width: 950px) {
+    #team-position-detail {
+        padding: 70px 10px;
+        pre {
+            width:90%;
+        }
+        #team-position-image {
+            display:none !important;
+        }
+
+        .projectItem {
+            display: inline-block;
+            cursor: pointer;
+            width: 98%;
+            padding-top: 66%;
+            box-sizing: border-box;
+            position: relative;
+            margin: 0 2% 2% 0;
+        }
+    }
+}
+
+@media (max-width: 500px) {
+    #team-position-detail {
+        pre {
+            width:90%;
+        }
+        #team-position-image {
+            display:none !important;
+        }
+
+        h1 {
+            margin: 15px 0;
+        }
+
+        h2 {
+            padding: 15px 0;
+        }
+    }
+}

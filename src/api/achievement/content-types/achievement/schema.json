@@ -25,6 +25,25 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::achievement-type.achievement-type"
+    },
+    "Vacancies": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::vacancy.vacancy",
+      "inversedBy": "Achievements"
+    },
+    "Project": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::project.project",
+      "inversedBy": "Achievements"
+    },
+    "Icon": {
+      "type": "enumeration",
+      "enum": [
+        "Square",
+        "Trophy"
+      ]
     }
   }
 }
