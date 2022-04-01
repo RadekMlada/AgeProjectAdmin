@@ -1,3 +1,5 @@
-7rsync -a public/uploads/ /storage/public/uploads/
+rsync -a public/uploads/ /storage/public/uploads/
 ---------------------------
 rsync -a /storage/public/uploads/ public/uploads/
+---------------------------
+ls -lsrt
