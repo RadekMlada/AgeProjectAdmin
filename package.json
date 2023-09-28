@@ -19,7 +19,8 @@
     "gulp-less": "^5.0.0",
     "gulp-minify-css": "^1.2.4",
     "sqlite3": "5.0.2",
-    "strapi-plugin-responsive-image": "^0.5.0"
+    "strapi-plugin-responsive-image": "^0.5.0",
+    "webpack": "^5.88.2"
   },
   "author": {
     "name": "A Strapi developer"
