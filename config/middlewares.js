@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = [
   'strapi::errors',
   {
@@ -11,7 +13,7 @@ module.exports = [
       }
     },
   },
-  { resolve: './src/middlewares/admin-redirect' },
+  { resolve: path.resolve(__dirname, '../src/middlewares/admin-redirect.js') },
   'strapi::cors',
   'strapi::poweredBy',
   'strapi::logger',
