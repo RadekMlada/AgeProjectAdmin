@@ -5,6 +5,6 @@ module.exports = ({ env }) => ({
     keys: env.array('APP_KEYS', ["testKey1", "testKey2"]),
   },
   dirs: {
-    public: '/storage/public',
+    //public: '/storage/public',
   },
 });

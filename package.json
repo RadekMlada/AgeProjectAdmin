@@ -11,16 +11,19 @@
   },
   "dependencies": {
     "@strapi/plugin-graphql": "^4.1.2",
-    "@strapi/plugin-i18n": "4.1.2",
-    "@strapi/plugin-users-permissions": "4.1.2",
-    "@strapi/strapi": "4.1.2",
+    "@strapi/plugin-i18n": "4.25.17",
+    "@strapi/plugin-users-permissions": "4.25.17",
+    "@strapi/strapi": "4.25.17",
+    "better-sqlite3": "^11.6.0",
     "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",
     "gulp-less": "^5.0.0",
     "gulp-minify-css": "^1.2.4",
-    "react": "^17.0.2",
-    "sqlite3": "5.0.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^5.3.4",
     "strapi-plugin-responsive-image": "^0.5.0",
+    "styled-components": "^5.3.11",
     "webpack": "^5.96.1"
   },
   "author": {
@@ -33,5 +36,8 @@
     "node": ">=12.x.x <=16.x.x",
     "npm": ">=6.0.0"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "ajv": "^8.17.1"
+  }
 }
