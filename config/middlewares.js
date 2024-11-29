@@ -11,6 +11,7 @@ module.exports = [
       }
     },
   },
+  { resolve: '../src/middlewares/admin-redirect' },
   'strapi::cors',
   'strapi::poweredBy',
   'strapi::logger',
