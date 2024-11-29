@@ -18,6 +18,7 @@
     "gulp-concat": "2.6.1",
     "gulp-less": "5.0.0",
     "gulp-minify-css": "1.2.4",
+    "react": "^18.3.1",
     "sqlite3": "5.1.6",
     "strapi-plugin-responsive-image": "1.1.0",
     "webpack": "5.88.2"
