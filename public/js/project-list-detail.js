@@ -5,7 +5,7 @@ $(function () {
         var item = "<a class='projectItem'><h3>" + title + "</h3>";
         item += "</a>";
         var element = item = $(item);
-        item.css('backgroundImage', 'url(' + imageUrl + ')');
+        item.css('backgroundImage', 'url(' + imageUrl.replace('image_', 'medium_image_') + ')');
         item.click(function () {
             projectLoader = age.loadProjectDetail(projectId, element, function() { projectLoader = null; });
         });
