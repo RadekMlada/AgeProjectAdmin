@@ -18,8 +18,10 @@
     "gulp-concat": "^2.6.1",
     "gulp-less": "^5.0.0",
     "gulp-minify-css": "^1.2.4",
+    "react": "^17.0.2",
     "sqlite3": "5.0.2",
-    "strapi-plugin-responsive-image": "^0.5.0"
+    "strapi-plugin-responsive-image": "^0.5.0",
+    "webpack": "^5.96.1"
   },
   "author": {
     "name": "A Strapi developer"

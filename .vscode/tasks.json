@@ -6,6 +6,13 @@
 			"task": "default",
 			"problemMatcher": [],
 			"label": "gulp: default"
-		}
+		},
+
+		{
+			"label": "Less Compile",
+			"type": "shell",
+			"command": "lessc ./public/css/main.less main.css",
+			"group": "build"
+		  }
 	]
 }
